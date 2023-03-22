@@ -89,28 +89,3 @@ void getBoardSize(int& width, int& height) {
         cin >> height;
     } while (height <= 0 || height > 8);
 }
-
-int main()
-{
-    char** ptr;
-    ptr = new char* [10];
-
-    for (int i = 0; i < 5; i++) {
-        ptr[i] = new char[6];
-    }
-
-
-
-
-
-
-
-    for (int i = 0; i < 5; i++)
-    {
-        delete[] ptr[i];
-        ptr[i] = NULL;
-    }
-    return 0;
-}
-
-
