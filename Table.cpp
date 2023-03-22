@@ -5,31 +5,16 @@
 
 using namespace std;
 
-void drawCell(int width, int height, int x, int y) {
+void drawCell(int width, int height, int x, int y, char value) {
 
     Console screen;
 
     //Insert Character Into Cell.
-    if (width % 2 == 0) {
-        if (height % 2 == 0) {
-            screen.GoTo(x - 1 + width / 2, y - 1 + height / 2);
-            cout << "A";
-        }
-        else {
-            screen.GoTo(x - 1 + width / 2, y + height / 2);
-            cout << "A";
-        }
-    }
-    else {
-        if (height % 2 != 0) {
-            screen.GoTo(x + width / 2, y + height / 2);
-            cout << "A";
-        }
-        else {
-            screen.GoTo(x + width / 2, y - 1 + height / 2);
-            cout << "A";
-        }
-    }
+    int x_center = width % 2 == 0 ? x - 1 + width / 2 : x + width / 2;
+    int y_center = height % 2 != 0 ? y - 1 + height / 2 : y + height / 2;
+   
+    screen.GoTo(x_center , y_center);
+    cout << value;
 
     screen.GoTo(x, y);
 
@@ -65,9 +50,9 @@ void drawCell(int width, int height, int x, int y) {
 }
 
 void PrintBoard(int width, int height, int x_start, int y_start, char** ptr) {
-    for (int i = 1; i < width; i++) {
-        for (int j = 1; j < height; j++) {
-            drawCell(10, 5, i * 10 + x_start, j * 5 + y_start);
+    for (int i = 0; i < width; i++) {
+        for (int j = 0; j < height; j++) {
+            drawCell(10, 5, i * 10 + x_start, j * 5 + y_start, ptr[i][j]);
         }
     }
 }
