@@ -1,4 +1,3 @@
-#pragma once
 #ifndef COLOR_H
 #define COLOR_H
 
@@ -21,4 +20,4 @@ struct Colors {
 	int BrightWhite = 15;
 };
 
-#endif#pragma once
+#endif
