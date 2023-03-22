@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void drawCell(int width, int height, int x, int y) {
+void drawCell(int width, int height, int x, int y, char value) {
 
     Console screen;
 
@@ -13,21 +13,21 @@ void drawCell(int width, int height, int x, int y) {
     if (width % 2 == 0) {
         if (height % 2 == 0) {
             screen.GoTo(x - 1 + width / 2, y - 1 + height / 2);
-            cout << "A";
+            cout << value;
         }
         else {
             screen.GoTo(x - 1 + width / 2, y + height / 2);
-            cout << "A";
+            cout << value;
         }
     }
     else {
         if (height % 2 != 0) {
             screen.GoTo(x + width / 2, y + height / 2);
-            cout << "A";
+            cout << value;
         }
         else {
             screen.GoTo(x + width / 2, y - 1 + height / 2);
-            cout << "A";
+            cout << value;
         }
     }
 
