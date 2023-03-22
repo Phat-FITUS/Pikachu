@@ -65,9 +65,9 @@ void drawCell(int width, int height, int x, int y, char value) {
 }
 
 void PrintBoard(int width, int height, int x_start, int y_start, char** ptr) {
-    for (int i = 1; i < width; i++) {
-        for (int j = 1; j < height; j++) {
-            drawCell(10, 5, i * 10 + x_start, j * 5 + y_start);
+    for (int i = 0; i < width; i++) {
+        for (int j = 0; j < height; j++) {
+            drawCell(10, 5, i * 10 + x_start, j * 5 + y_start, ptr[i][j]);
         }
     }
 }
