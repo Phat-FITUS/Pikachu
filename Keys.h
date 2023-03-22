@@ -14,4 +14,4 @@ struct Keys {
 	int Delete = 127;
 };
 
-#endif // !KEY_H#pragma once
+#endif

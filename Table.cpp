@@ -10,26 +10,11 @@ void drawCell(int width, int height, int x, int y, char value) {
     Console screen;
 
     //Insert Character Into Cell.
-    if (width % 2 == 0) {
-        if (height % 2 == 0) {
-            screen.GoTo(x - 1 + width / 2, y - 1 + height / 2);
-            cout << value;
-        }
-        else {
-            screen.GoTo(x - 1 + width / 2, y + height / 2);
-            cout << value;
-        }
-    }
-    else {
-        if (height % 2 != 0) {
-            screen.GoTo(x + width / 2, y + height / 2);
-            cout << value;
-        }
-        else {
-            screen.GoTo(x + width / 2, y - 1 + height / 2);
-            cout << value;
-        }
-    }
+    int x_center = width % 2 == 0 ? x - 1 + width / 2 : x + width / 2;
+    int y_center = height % 2 != 0 ? y - 1 + height / 2 : y + height / 2;
+   
+    screen.GoTo(x_center , y_center);
+    cout << value;
 
     screen.GoTo(x, y);
 
