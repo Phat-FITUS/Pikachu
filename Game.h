@@ -2,13 +2,13 @@
 
 #include "Console.h"
 #include "Board.h"
-#include "Draw.h"
+#include "Object.h"
 
 class Game
 {
 private:
 	Console screen;
-	Draw draw;
+	Object draw;
 public:
 	void start();
 };
