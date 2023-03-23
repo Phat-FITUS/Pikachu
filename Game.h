@@ -9,5 +9,7 @@ class Game
 private:
 	Console screen;
 	Draw draw;
+public:
+	void start();
 };
 
