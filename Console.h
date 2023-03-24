@@ -10,7 +10,6 @@ class Console
 {
 public:
     Colors color;
-    Keys key;
     void Clear();
     void MoveConsole(int x, int y);
     void SetWindowSize(int w, int h);
