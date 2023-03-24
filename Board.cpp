@@ -43,7 +43,8 @@ void Board::display(int x_start, int y_start) {
                 j * this->CELL_HEIGHT + y_start,            //Left top y of a Cell
                 this->CELL_WIDTH,  //Width default of a Cell
                 this->CELL_HEIGHT, //Height default of a Cell
-                this->data[i][j] //Value text of a Cell
+                this->data[i][j], //Value text of a Cell
+                this->selection
             );
         }
     }
