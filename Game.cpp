@@ -12,6 +12,11 @@ Game::Game() {
 	this->rainbow[6] = this->screen.color.Blue;
 }
 
+void Game::selectDifficultPage() {
+	cout << "ditme BHT" << endl;
+	return;
+}
+
 void Game::start() {
 	bool playing = true;
 	int selection = 0;
@@ -34,6 +39,14 @@ void Game::start() {
 			break;
 		}
 		case ENTER: {
+			if (selection == 2) {
+				playing = false;
+			}
+			else {
+				this->screen.Clear();
+				selectDifficultPage();
+				system("pause");
+			}
 			break;
 		}
 		case BACKSPACE:
