@@ -12,9 +12,16 @@ Game::Game() {
 	this->rainbow[6] = this->screen.color.Blue;
 }
 
+void Game::mainMenu() {
+}
+
 void Game::selectDifficultPage() {
-	cout << "ditme BHT" << endl;
-	return;
+}
+
+void Game::customDifficultPage() {
+}
+
+void Game::leaderBoard() {
 }
 
 void Game::start() {
@@ -42,10 +49,8 @@ void Game::start() {
 			if (selection == 2) {
 				playing = false;
 			}
-			else {
-				this->screen.Clear();
-				selectDifficultPage();
-				system("pause");
+			else if (!this->username.empty()){ //Only accept unempty username
+				this->mainMenu();
 			}
 			break;
 		}
@@ -56,7 +61,7 @@ void Game::start() {
 			break;
 		}
 		default:
-			if (username.length() < 16 && selection == 0) username.push_back(key_press);
+			if (username.length() < 32 && selection == 0) username.push_back(key_press);
 			break;
 		}
 	}

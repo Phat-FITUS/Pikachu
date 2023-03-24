@@ -15,7 +15,10 @@ private:
 	string username;
 	int rainbow[7];
 
+	void mainMenu();
 	void selectDifficultPage();
+	void customDifficultPage();
+	void leaderBoard();
 	void printImageFromFile(int, int, string, bool);
 public:
 	Game();
