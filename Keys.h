@@ -10,6 +10,6 @@
 #define RIGHTARROW  77
 #define SPACE  32
 #define BACKSPACE  8
-#define DELETE  127
+#define DELETE_KEY  127
 
 #endif

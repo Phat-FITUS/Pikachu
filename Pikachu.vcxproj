@@ -141,6 +141,9 @@
     <ClInclude Include="Keys.h" />
     <ClInclude Include="Object.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="logo.bin" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -58,21 +58,21 @@ void Object::Button(int x, int y, int width, int height, string text, bool selec
         this->screen.SetColor(screen.color.Black, screen.color.White);
     }
     //Calculate the center position
-    int x_center = width % 2 == 0 ? x - 1 + width / 2 : x + width / 2;
-    int y_center = height % 2 == 0 ? y - 1 + height / 2 : y + height / 2;
+    int x_center = x + (width - text.length()) / 2;
+    int y_center = y + height / 2;
 
     //Insert character into cell
     this->screen.GoTo(x_center, y_center);
     cout << text;
 
     //Object top horizontal line
-    this->HorizontalLine(x + 1, y, width - 2, (char) 220);
+    this->HorizontalLine(x, y, width, (char) 220);
 
     //Object right vertical line
     this->VerticalLine(x + width - 1, y + 1, height - 2, (char) 219);
 
     //Object bottom horizontal line
-    this->HorizontalLine(x + 1, y + height - 1, width - 2, (char) 223);
+    this->HorizontalLine(x, y + height - 1, width, (char) 223);
 
     //Object left vertical line
     this->VerticalLine(x, y + 1, height - 2, (char) 219);
@@ -98,17 +98,18 @@ void Object::TextEntry(int x, int y, int width, int height, string title, string
     cout << (char) 191;
 
     //bottom of entry
+    this->screen.GoTo(x, y + height);
     cout << char(192);
     this->HorizontalLine(x + 1, y + height, width - 2, (char) 196);
     cout << char(217);
 
     //left of entry
-    this->VerticalLine(x, y, height, (char) 179);
+    this->VerticalLine(x, y + 1, height - 1, (char) 179);
 
-    //right of form
-    this->VerticalLine(x + width, y, height, (char) 179);
+    //right of entry
+    this->VerticalLine(x + width - 1, y + 1, height - 1, (char) 179);
 
-    //title of form
+    //title of entry
     this->screen.GoTo(x + 3, y);
     for (char t : title) {
         if (t == char(32)) cout << char(196);
@@ -117,7 +118,7 @@ void Object::TextEntry(int x, int y, int width, int height, string title, string
 
     //value of form
     int x_text = x + 3;
-    int y_text = height % 2 == 0 ? y + height / 2 : y - 1 + height / 2;
+    int y_text = y + height / 2;
 
     this->screen.GoTo(x_text, y_text);
 
