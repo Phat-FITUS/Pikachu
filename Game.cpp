@@ -99,7 +99,7 @@ void Game::selectDifficultPage() {
 }
 
 
-void Game::customDifficultPage() {// Check cai nay lai van chua _getch() duoc width va height
+void Game::customDifficultPage() {
 	bool playing = true;
 	int selection = 0;
 	string width_Board;
@@ -128,12 +128,20 @@ void Game::customDifficultPage() {// Check cai nay lai van chua _getch() duoc wi
 					playing = false;
 				}
 				else {
-					if (stoi(width_Board, 0, 10) > 0 && stoi(height_Board, 0, 10) > 0) {
+					if (stoi(width_Board) > 0 && stoi(height_Board, 0, 10) > 0) {
 						cout << "ditme BHT";
 					}
 				}
 			}
+			case DELETE_KEY:
+			case 83: case -32: { //delete key of some laptop board
+				if (width_Board.length() == 0 && selection == 0) width_Board.pop_back();
+				if (height_Board.length() == 0 && selection == 1) height_Board.pop_back();
+				break;
+			}
 			default:
+				if (width_Board.length() == 0 && selection == 0) width_Board.push_back(key_press);
+				if (height_Board.length() == 0 && selection == 1) height_Board.push_back(key_press);
 				break;
 		}
 	}
