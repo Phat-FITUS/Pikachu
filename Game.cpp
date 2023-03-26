@@ -128,20 +128,22 @@ void Game::customDifficultPage() {
 					playing = false;
 				}
 				else {
-					if (stoi(width_Board) > 0 && stoi(height_Board, 0, 10) > 0) {
-						cout << "ditme BHT";
+					
+					if (!width_Board.empty() && !height_Board.empty() && board.changeSize(stoi(width_Board), stoi(height_Board))) {
 					}
 				}
+				break;
 			}
+			case BACKSPACE:
 			case DELETE_KEY:
 			case 83: case -32: { //delete key of some laptop board
-				if (width_Board.length() == 0 && selection == 0) width_Board.pop_back();
-				if (height_Board.length() == 0 && selection == 1) height_Board.pop_back();
+				if (width_Board.length() > 0 && selection == 0) width_Board.pop_back();
+				if (height_Board.length() > 0 && selection == 1) height_Board.pop_back();
 				break;
 			}
 			default:
-				if (width_Board.length() == 0 && selection == 0) width_Board.push_back(key_press);
-				if (height_Board.length() == 0 && selection == 1) height_Board.push_back(key_press);
+				if (selection == 0) width_Board.push_back(key_press);
+				if (selection == 1) height_Board.push_back(key_press);
 				break;
 		}
 	}

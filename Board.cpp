@@ -36,6 +36,16 @@ void Board::deallocate() {
     delete[] this->data;
 }
 
+bool Board::checkValidSize(int width, int height)
+{
+    return (width % 2 == 0
+        || height % 2 == 0) 
+        && (width <= Board().MAX_SIZE
+        && 0 < width
+        && 0 < height
+        && height <= Board().MAX_SIZE);
+}
+
 void Board::display(int x_start, int y_start) {
     for (int i = 0; i < this->height; i++) {
         for (int j = 0; j < this->width; j++) {
@@ -58,7 +68,10 @@ void Board::fill(char initialization) {
     }
 }
 
-void Board::changeSize(int width, int height) {
+bool Board::changeSize(int width, int height) {
+    //Invalid size
+    if (!Board().checkValidSize(width, height)) return false;
+
     //In case of data is already allocated
     //We have to free the old allocated memory before allocating a new one
     if (this->data) this->deallocate();
@@ -67,4 +80,7 @@ void Board::changeSize(int width, int height) {
     this->width = width;
     this->height = height;
     this->allocate();
+
+    //Change successfully
+    return true;
 }

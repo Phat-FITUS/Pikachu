@@ -13,6 +13,7 @@ private:
 	Console screen;
 	Object draw;
 	string username;
+	Board board;
 	int rainbow[7];
 
 	void mainMenu();
