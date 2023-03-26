@@ -129,7 +129,6 @@ void Game::customDifficultPage() {// Check cai nay lai van chua _getch() duoc wi
 				}
 				else {
 					if (stoi(width_Board, 0, 10) > 0 && stoi(height_Board, 0, 10) > 0) {
-
 						cout << "ditme BHT";
 					}
 				}
