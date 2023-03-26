@@ -13,15 +13,146 @@ Game::Game() {
 }
 
 void Game::mainMenu() {
+	
+	bool playing = true;
+	int selection = 0;
+
+	while (playing) {
+
+		this->screen.Clear();
+
+		draw.Button(48, 8, 20, 5, "Play", selection == 0);
+		draw.Button(48, 13, 20, 5, "Custom Play", selection == 1);
+		draw.Button(48, 18, 20, 5, "Leaderboard", selection == 2);
+		draw.Button(48, 23, 20, 5, "Exit", selection == 3);
+
+		char key_press = _getch();
+
+		switch (key_press)
+		{
+			case TAB: {
+				selection = (selection + 1) % 4;
+				break;
+			}
+			case ENTER: {
+				if (selection == 0) {
+					this->selectDifficultPage();
+				}
+				if (selection == 1) {
+					this->customDifficultPage();
+				}
+				if (selection == 2) {
+					this->leaderBoard();
+				}
+				if (selection == 3) {
+					playing = false;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
 }
 
 void Game::selectDifficultPage() {
+	bool playing = true;
+	int selection = 0;
+
+	while (playing) {
+
+		this->screen.Clear();
+
+		draw.Button(48, 8, 20, 5, "Easy (2x2)", selection == 0);
+		draw.Button(48, 13, 20, 5, "Medium (4x4)", selection == 1);
+		draw.Button(48, 18, 20, 5, "Hard (8x8)", selection == 2);
+		draw.Button(48, 23, 20, 5, "Exit", selection == 3);
+
+		char key_press = _getch();
+
+		switch (key_press)
+		{
+			case TAB: {
+				selection = (selection + 1) % 4;
+				break;
+			}
+			case ENTER: {
+				if (selection == 0) {
+					
+				}
+				if (selection == 1) {
+					
+				}
+				if (selection == 2) {
+					
+				}
+				if (selection == 3) {
+					playing = false;
+				}
+				break;
+			default:
+				selection = 0;
+				break;
+			}
+		}
+	}
 }
+
 
 void Game::customDifficultPage() {
+	bool playing = true;
+	int selection = 0;
+	string width_Board;
+	string height_Board;
+
+
+	while (playing) {
+
+		this->screen.Clear();
+
+		draw.TextEntry(34, 8, 19, 4, "Width", width_Board, "Your width...", selection == 0);
+		draw.TextEntry(54, 8, 19, 4, "Height",height_Board, "Your height...", selection == 1);
+		draw.Button(34, 13, 19, 5, "Enter", selection == 2);
+		draw.Button(54, 13, 19, 5, "Exit", selection == 3);
+
+		char key_press = _getch();
+
+		switch (key_press)
+		{
+			case TAB: {
+				selection = (selection + 1) % 4;
+				break;
+			}
+			case ENTER: {
+				if (selection == 3) {
+					playing = false;
+				}
+				else {
+					if (stoi(width_Board) > 0 && stoi(height_Board, 0, 10) > 0) {
+						cout << "ditme BHT";
+					}
+				}
+			}
+			case DELETE_KEY:
+			case 83: case -32: { //delete key of some laptop board
+				if (width_Board.length() == 0 && selection == 0) width_Board.pop_back();
+				if (height_Board.length() == 0 && selection == 1) height_Board.pop_back();
+				break;
+			}
+			default:
+				if (width_Board.length() == 0 && selection == 0) width_Board.push_back(key_press);
+				if (height_Board.length() == 0 && selection == 1) height_Board.push_back(key_press);
+				break;
+		}
+	}
 }
 
+
 void Game::leaderBoard() {
+
+	this->screen.Clear();
+
+	cout << "ditme BHT";
 }
 
 void Game::start() {
