@@ -99,7 +99,7 @@ void Game::selectDifficultPage() {
 }
 
 
-void Game::customDifficultPage() {// Check cai nay lai van chua _getch() duoc width va height
+void Game::customDifficultPage() {
 	bool playing = true;
 	int selection = 0;
 	string width_Board;
