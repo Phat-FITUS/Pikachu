@@ -132,6 +132,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Pikachu.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
@@ -140,6 +141,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="logo.bin" />
