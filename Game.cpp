@@ -2,16 +2,6 @@
 #include <fstream>
 #include<conio.h>
 
-Game::Game() {
-	this->rainbow[0] = this->screen.color.LightRed;
-	this->rainbow[1] = this->screen.color.LightAqua;
-	this->rainbow[2] = this->screen.color.LightGreen;
-	this->rainbow[3] = this->screen.color.LightPurple;
-	this->rainbow[4] = this->screen.color.BrightWhite;
-	this->rainbow[5] = this->screen.color.LightYellow;
-	this->rainbow[6] = this->screen.color.Blue;
-}
-
 void Game::mainMenu() {
 	
 	bool playing = true;
@@ -165,7 +155,7 @@ void Game::start() {
 		
 		this->screen.Clear();
 
-		printImageFromFile(28, 0, "logo.bin", true);
+		printImageFromFile(32, 1, "logo.bin", this->screen.color.BrightWhite);
 		draw.TextEntry(40, 8, 38, 4, "username", this->username, "Your username...", selection == 0);
 		draw.Button(40, 13, 18, 5, "Enter", selection == 1);
 		draw.Button(60, 13, 18, 5, "Exit", selection == 2);
@@ -200,7 +190,7 @@ void Game::start() {
 	}
 }
 
-void Game::printImageFromFile(int x, int y, string filename, bool colorful) {
+void Game::printImageFromFile(int x, int y, string filename, int colorCode) {
 	fstream f;
 	f.open(filename.c_str(), ios::binary | ios::in);
 
@@ -208,26 +198,14 @@ void Game::printImageFromFile(int x, int y, string filename, bool colorful) {
 		cout << "File " << filename << " not found!\n";
 		return;
 	}
-
-	char temp[100] = {};
-	f.read((char*)&temp, 4);
-	int line = atoi(temp);
-
-	f.read((char*)&temp, 4);
-	int amount = atoi(temp);
-
-	for (int currentLine = 0; currentLine < line; currentLine++) {
-		f.read((char*)&temp, amount);
-
+	string line;
+	int currentLine = 0;
+	while (getline(f, line)) {
 		this->screen.GoTo(x, y + currentLine);
-		if (colorful) {
-			this->screen.SetColor(this->screen.color.Black, this->rainbow[currentLine % 7]);
-		}
-		else {
-			this->screen.SetColor(this->screen.color.Black, this->screen.color.BrightWhite);
-		}
+		this->screen.SetColor(this->screen.color.Black, colorCode);
 
-		cout << temp;
+		cout << line;
+		currentLine++;
 	}
 	f.close();
 }

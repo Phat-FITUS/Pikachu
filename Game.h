@@ -14,15 +14,13 @@ private:
 	Object draw;
 	string username;
 	Board board;
-	int rainbow[7];
 
 	void mainMenu();
 	void selectDifficultPage();
 	void customDifficultPage();
 	void leaderBoard();
-	void printImageFromFile(int, int, string, bool);
+	void printImageFromFile(int, int, string, int);
 public:
-	Game();
 	void start();
 };
 
