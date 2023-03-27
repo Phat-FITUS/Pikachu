@@ -3,6 +3,7 @@
 #include "Console.h"
 #include "Board.h"
 #include "Object.h"
+#include "User.h"
 #include <string>
 
 using namespace std;
