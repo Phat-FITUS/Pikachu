@@ -159,6 +159,8 @@ void Game::playingPage() {
 		switch (key_press)
 		{
 		case ENTER: {
+			if (board_data[selection.x][selection.y] == 0) break;
+
 			if (choices[0] == Coordinate()) {
 				choices[0] = selection;
 			}
