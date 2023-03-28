@@ -23,9 +23,9 @@ Board::~Board() {
 }
 
 void Board::allocate() {
-    this->data = new char* [height];
+    this->data = new char* [height + 2];
     for (int i = 0; i < height; i++) {
-        this->data[i] = new char[width];
+        this->data[i] = new char[width + 2];
     }
 }
 
@@ -47,8 +47,8 @@ bool Board::checkValidSize(int width, int height)
 }
 
 void Board::display(int x_start, int y_start) {
-    for (int i = 0; i < this->height; i++) {
-        for (int j = 0; j < this->width; j++) {
+    for (int i = 1; i <= this->height; i++) {
+        for (int j = 1; j <= this->width; j++) {
             this->draw.Cell(i * this->CELL_WIDTH + x_start, //Left top x of a Cell
                 j * this->CELL_HEIGHT + y_start,            //Left top y of a Cell
                 this->CELL_WIDTH,  //Width default of a Cell
