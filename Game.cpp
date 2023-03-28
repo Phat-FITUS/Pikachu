@@ -166,7 +166,8 @@ void Game::playingPage() {
 				choices[1] = selection;
 				this->board.display(10, 6, selection, choices);
 
-				if (Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1])) {
+				if (Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1]) 
+					&& board_data[choices[0].x][choices[0].y] == board_data[choices[1].x][choices[1].y] && board_data[choices[0].x][choices[0].y] != 0) {
 					queue<Coordinate> path = Optimization::getPath(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1]);
 
 					draw.LineBetweenCells(choices[0], choices[1], path);
@@ -185,22 +186,30 @@ void Game::playingPage() {
 		}
 		case RIGHTARROW:
 		case 'd': {
-			selection = Coordinate(selection.x == this->board.getWidth() ? 1 : selection.x + 1, selection.y);
+			do {
+				selection = Coordinate(selection.x == this->board.getWidth() ? 1 : selection.x + 1, selection.y);
+			} while (board_data[selection.x][selection.y] == 0);
 			break;
 		}
 		case LEFTARROW:
 		case 'a': {
-			selection = Coordinate(selection.x > 1 ? selection.x - 1 : this->board.getWidth(), selection.y);
+			do {
+				selection = Coordinate(selection.x > 1 ? selection.x - 1 : this->board.getWidth(), selection.y);
+			} while (board_data[selection.x][selection.y] == 0);
 			break;
 		}
 		case UPARROW:
 		case 'w': {
-			selection = Coordinate(selection.x, selection.y > 1 ? selection.y - 1 : this->board.getHeight());
+			do {
+				selection = Coordinate(selection.x, selection.y > 1 ? selection.y - 1 : this->board.getHeight());
+			} while (board_data[selection.x][selection.y] == 0);
 			break;
 		}
 		case DOWNARROW:
 		case 's': {
-			selection = Coordinate(selection.x, selection.y == this->board.getHeight() ? 1 : selection.y + 1);
+			do {
+				selection = Coordinate(selection.x, selection.y == this->board.getHeight() ? 1 : selection.y + 1);
+			} while (board_data[selection.x][selection.y] == 0);
 			break;
 		}
 		default:

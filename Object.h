@@ -18,5 +18,6 @@ public:
 	void Button(int, int, int, int, string, bool);
 	void TextEntry(int, int, int, int, string, string, string, bool);
 	void LineBetweenCells(Coordinate, Coordinate, queue<Coordinate>);
+	void MakePathLine(Coordinate, Coordinate);
 };
 

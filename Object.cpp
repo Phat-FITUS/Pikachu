@@ -155,16 +155,7 @@ void Object::LineBetweenCells(Coordinate root, Coordinate destination, queue<Coo
     Coordinate p2 = path.front();
     path.pop();
 
-    if (p1.x != p2.x) {
-        int x_start = p1.x < p2.x ? p1.x : p2.x;
-        x_start = x_start * 9 - 1 + 7;
-        this->HorizontalLine(x_start , p1.y * 5 - 1 + 4, 8, '-');
-    }
-    else {
-        int y_start = p1.y < p2.y ? p1.y : p2.y;
-        y_start = y_start * 5;
-        this->VerticalLine(p1.x * 9 - 2 + 7, y_start + 4, 4, '|');
-    }
+    this->MakePathLine(p1, p2);
 
     //Traverse from destination to the root
     while (!path.empty()) {
@@ -173,15 +164,19 @@ void Object::LineBetweenCells(Coordinate root, Coordinate destination, queue<Coo
         p2 = path.front();
         path.pop();
 
-        if (p1.x != p2.x) {
-            int x_start = p1.x < p2.x ? p1.x : p2.x;
-            x_start = x_start * 9 - 1 + 7;
-            this->HorizontalLine(x_start, p1.y * 5 - 1 + 4, 8, '-');
-        }
-        else {
-            int y_start = p1.y < p2.y ? p1.y : p2.y;
-            y_start = y_start * 5;
-            this->VerticalLine(p1.x * 9 - 2 + 7, y_start + 4, 4, '|');
-        }
+        this->MakePathLine(p1, p2);
+    }
+}
+
+void Object::MakePathLine(Coordinate p1, Coordinate p2) {
+    if (p1.x != p2.x) {
+        int x_start = p1.x < p2.x ? p1.x : p2.x;
+        x_start = x_start * 9 - 1 + 7;
+        this->HorizontalLine(x_start, p1.y * 5 - 1 + 4, 8, '-');
+    }
+    else {
+        int y_start = p1.y < p2.y ? p1.y : p2.y;
+        y_start = y_start * 5;
+        this->VerticalLine(p1.x * 9 - 2 + 7, y_start + 4, 4, '|');
     }
 }
