@@ -55,7 +55,7 @@ void Game::selectDifficultPage() {
 
 		draw.Button(48, 8, 20, 5, "Easy (2x2)", selection == 0);
 		draw.Button(48, 13, 20, 5, "Medium (4x4)", selection == 1);
-		draw.Button(48, 18, 20, 5, "Hard (8x8)", selection == 2);
+		draw.Button(48, 18, 20, 5, "Hard (6x6)", selection == 2);
 		draw.Button(48, 23, 20, 5, "Exit", selection == 3);
 
 		char key_press = _getch();
@@ -88,7 +88,6 @@ void Game::selectDifficultPage() {
 	}
 }
 
-
 void Game::customDifficultPage() {
 	bool playing = true;
 	int selection = 0;
@@ -118,7 +117,6 @@ void Game::customDifficultPage() {
 					playing = false;
 				}
 				else {
-					
 					if (!width_Board.empty() && !height_Board.empty() && board.changeSize(stoi(width_Board), stoi(height_Board))) {
 					}
 				}
@@ -139,6 +137,8 @@ void Game::customDifficultPage() {
 	}
 }
 
+void Game::playingPage() {
+}
 
 void Game::leaderBoard() {
 

@@ -22,7 +22,7 @@ void Object::Cell(int x, int y, int width, int height, char value, bool selected
         this->screen.SetColor(screen.color.Black, screen.color.LightBlue);
     }
     else {
-        this->screen.SetColor(screen.color.Black, screen.color.White);
+        this->screen.SetColor(screen.color.Black, screen.color.BrightWhite);
     }
     //Calculate the center position
     int x_center = width % 2 == 0 ? x - 1 + width / 2 : x + width / 2;
