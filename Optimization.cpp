@@ -49,6 +49,48 @@ void Optimization::initBoardGame(char** board, int width, int height){
 	delete[] list;
 }
 
+void Optimization::shuffleBoardGame(char** board, int width, int height) {
+	//Get the number of non-zero element
+	int numberOfNon_zeroElement = 0;
+	for (int i = 1; i <= width; i++) {
+		for (int j = 1; j <= width; j++) {
+			if (board[i][j] != 0) {
+				numberOfNon_zeroElement++;
+			}
+		}
+	}
+
+	//Allocate list of random value
+	randomPair* list = new randomPair[numberOfNon_zeroElement];
+
+	//Add value to pair
+	int index = 0;
+	for (int i = 1; i <= width; i++) {
+		for (int j = 1; j <= width; j++) {
+			if (board[i][j] != 0) {
+				list[index].value = board[i][j];
+				list[index++].randomOrder = rand() % 9876543210;
+			}
+		}
+	}
+
+	//sort the random order
+	Optimization::sort(list, width * height, compareRandom);
+
+	//put the random to data
+	index = 0;
+	for (int i = 1; i <= width; i++) {
+		for (int j = 1; j <= height; j++) {
+			if (board[i][j] != 0) {
+				board[i][j] = list[index++].value;
+			}
+		}
+	}
+
+	//delallocate the temporary memory
+	delete[] list;
+}
+
 bool Optimization::canConnect(char** board, int width, int height, Coordinate root, Coordinate destination){
 	//initialization
 	bool** mark = new bool* [width + 2];

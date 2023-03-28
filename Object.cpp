@@ -16,9 +16,6 @@ void Object::VerticalLine(int x, int y, int height, char value) {
 }
 
 void Object::Cell(int x, int y, int width, int height, char value, bool selected, bool active) {
-    //ignore empty cell
-    if (value == 0) return;
-
     //Draw active cell
     if (active) {
         this->screen.SetColor(screen.color.Black, screen.color.LightRed);

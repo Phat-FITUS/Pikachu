@@ -178,6 +178,15 @@ void Game::playingPage() {
 
 				Sleep(500);
 
+				if (this->isEndGame()) {
+					return;
+				}
+
+				//Shuffle the board until there is a path connecting any cell
+				while (!this->board.canPlay()) {
+					Optimization::shuffleBoardGame(board_data, this->board.getWidth(), this->board.getHeight());
+				}
+
 				choices[0] = Coordinate();
 				choices[1] = Coordinate();
 				this->screen.Clear();
@@ -186,30 +195,22 @@ void Game::playingPage() {
 		}
 		case RIGHTARROW:
 		case 'd': {
-			do {
-				selection = Coordinate(selection.x == this->board.getWidth() ? 1 : selection.x + 1, selection.y);
-			} while (board_data[selection.x][selection.y] == 0);
+			selection = Coordinate(selection.x == this->board.getWidth() ? 1 : selection.x + 1, selection.y);
 			break;
 		}
 		case LEFTARROW:
 		case 'a': {
-			do {
-				selection = Coordinate(selection.x > 1 ? selection.x - 1 : this->board.getWidth(), selection.y);
-			} while (board_data[selection.x][selection.y] == 0);
+			selection = Coordinate(selection.x > 1 ? selection.x - 1 : this->board.getWidth(), selection.y);
 			break;
 		}
 		case UPARROW:
 		case 'w': {
-			do {
-				selection = Coordinate(selection.x, selection.y > 1 ? selection.y - 1 : this->board.getHeight());
-			} while (board_data[selection.x][selection.y] == 0);
+			selection = Coordinate(selection.x, selection.y > 1 ? selection.y - 1 : this->board.getHeight());
 			break;
 		}
 		case DOWNARROW:
 		case 's': {
-			do {
-				selection = Coordinate(selection.x, selection.y == this->board.getHeight() ? 1 : selection.y + 1);
-			} while (board_data[selection.x][selection.y] == 0);
+			selection = Coordinate(selection.x, selection.y == this->board.getHeight() ? 1 : selection.y + 1);
 			break;
 		}
 		default:
@@ -223,6 +224,20 @@ void Game::leaderBoard() {
 	this->screen.Clear();
 
 	cout << "ditme BHT";
+}
+
+bool Game::isEndGame() {
+	bool endGame = true;
+
+	for (int i = 1; i <= this->board.getWidth() && endGame; i++) {
+		for (int j = 1; j <= this->board.getHeight() && endGame; j++) {
+			if (this->board.getData()[i][j] != 0) {
+				endGame = false;
+			}
+		}
+	}
+
+	return endGame;
 }
 
 void Game::start() {

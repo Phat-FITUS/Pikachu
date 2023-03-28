@@ -15,7 +15,6 @@ private:
 	void allocate(); 
 	void deallocate();
 	bool checkValidSize(int width, int height);
-	bool canPlay();
 public:
 	Board();
 	Board(int, int);
@@ -24,6 +23,7 @@ public:
 	void fill(char);
 	void addPokemon();
 	bool changeSize(int, int);
+	bool canPlay();
 	int getWidth();
 	int getHeight();
 	char** getData();

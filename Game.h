@@ -22,6 +22,7 @@ private:
 	void customDifficultPage();
 	void playingPage();
 	void leaderBoard();
+	bool isEndGame();
 	void printImageFromFile(int, int, string, int);
 public:
 	void start();

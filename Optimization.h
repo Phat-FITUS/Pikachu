@@ -22,6 +22,7 @@ private:
 	static queue<Coordinate> makePath(Coordinate**, Coordinate);
 public:
 	static void initBoardGame(char**, int, int);
+	static void shuffleBoardGame(char**, int, int);
 	template<typename T>
 	static void sort(T*, int, bool(*cmp)(T a, T b));
 	template<typename T>
