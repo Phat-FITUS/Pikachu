@@ -4,6 +4,7 @@
 #include "Board.h"
 #include "Object.h"
 #include "User.h"
+#include "Optimization.h"
 #include <string>
 
 using namespace std;
@@ -19,6 +20,7 @@ private:
 	void mainMenu();
 	void selectDifficultPage();
 	void customDifficultPage();
+	void playingPage();
 	void leaderBoard();
 	void printImageFromFile(int, int, string, int);
 public:
