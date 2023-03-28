@@ -46,18 +46,18 @@ bool Board::checkValidSize(int width, int height)
 {
     return (width % 2 == 0
         || height % 2 == 0) 
-        && (width <= Board().MAX_SIZE
+        && (width <= this->MAX_SIZE
         && 0 < width
         && 0 < height
-        && height <= Board().MAX_SIZE);
+        && height <= this->MAX_SIZE);
 }
 
 bool Board::canPlay(){
     bool canPlay = false;
-    for (int x1 = 1; x1 <= this->height && !canPlay; x1++) {
-        for (int y1 = 1; y1 <= this->width && !canPlay; y1++) {
-            for (int x2 = 1; x2 <= this->height && !canPlay; x2++) {
-                for (int y2 = 1; y2 <= this->width && !canPlay; y2++) {
+    for (int x1 = 1; x1 <= this->width && !canPlay; x1++) {
+        for (int y1 = 1; y1 <= this->height && !canPlay; y1++) {
+            for (int x2 = 1; x2 <= this->width && !canPlay; x2++) {
+                for (int y2 = 1; y2 <= this->height && !canPlay; y2++) {
                     if ((x1 != x2 || y1 != y2) && this->data[x1][y1] == this->data[x2][y2] && this->data[x1][y1] != 0) {
                         canPlay = Optimization().canConnect(this->data, this->width, this->height, Coordinate(x1, y1), Coordinate(x2, y2));
                     }
@@ -68,7 +68,7 @@ bool Board::canPlay(){
     return canPlay;
 }
 
-void Board::display(int x_start, int y_start) {
+void Board::display(int x_start, int y_start, Coordinate currentSelection, Coordinate active[2]) {
     for (int i = 1; i <= this->width; i++) {
         for (int j = 1; j <= this->height; j++) {
             this->draw.Cell((i - 1) * this->CELL_WIDTH + x_start, //Left top x of a Cell
@@ -76,7 +76,8 @@ void Board::display(int x_start, int y_start) {
                 this->CELL_WIDTH,  //Width default of a Cell
                 this->CELL_HEIGHT, //Height default of a Cell
                 this->data[i][j], //Value text of a Cell
-                this->selection
+                currentSelection == Coordinate(i, j),
+                active[0] == Coordinate(i, j) || active[1] == Coordinate(i, j)
             );
         }
     }
@@ -113,4 +114,16 @@ bool Board::changeSize(int width, int height) {
 
     //Change successfully
     return true;
+}
+
+int Board::getWidth() {
+    return this->width;
+}
+
+int Board::getHeight() {
+    return this->height;
+}
+
+char** Board::getData() {
+    return this->data;
 }

@@ -1,7 +1,6 @@
 #include "Object.h"
 #include <iostream>
 
-
 void Object::HorizontalLine(int x, int y, int width, char value) {
     for (int x0 = 0; x0 < width; x0++) {
         this->screen.GoTo(x + x0, y);
@@ -16,7 +15,24 @@ void Object::VerticalLine(int x, int y, int height, char value) {
     }
 }
 
-void Object::Cell(int x, int y, int width, int height, char value, bool selected) {
+void Object::Cell(int x, int y, int width, int height, char value, bool selected, bool active) {
+    //ignore empty cell
+    if (value == 0) return;
+
+    //Draw active cell
+    if (active) {
+        this->screen.SetColor(screen.color.Black, screen.color.LightRed);
+        this->screen.GoTo(x + 2, y + 1);
+        cout << (char)218;
+        this->screen.GoTo(x + width - 3, y + 1);
+        cout << (char)191;
+        this->screen.GoTo(x + 2, y + height - 2);
+        cout << (char)192;
+        this->screen.GoTo(x + width - 3, y + height - 2);
+        cout << (char)217;
+    }
+
+    //Color of selected cell
     this->screen.GoTo(x, y);
     if (selected) {
         this->screen.SetColor(screen.color.Black, screen.color.LightBlue);
@@ -24,6 +40,7 @@ void Object::Cell(int x, int y, int width, int height, char value, bool selected
     else {
         this->screen.SetColor(screen.color.Black, screen.color.BrightWhite);
     }
+
     //Calculate the center position
     int x_center = width % 2 == 0 ? x - 1 + width / 2 : x + width / 2;
     int y_center = height % 2 == 0 ? y - 1 + height / 2 : y + height / 2;
@@ -127,5 +144,44 @@ void Object::TextEntry(int x, int y, int width, int height, string title, string
     }
     else {
         cout << placeholder;
+    }
+}
+
+void Object::LineBetweenCells(Coordinate root, Coordinate destination, queue<Coordinate> path) {
+    //Take 2 first of point as a root to get the type of change
+    Coordinate p1 = path.front();
+    path.pop();
+
+    Coordinate p2 = path.front();
+    path.pop();
+
+    if (p1.x != p2.x) {
+        int x_start = p1.x < p2.x ? p1.x : p2.x;
+        x_start = x_start * 9 - 1 + 7;
+        this->HorizontalLine(x_start , p1.y * 5 - 1 + 4, 8, '-');
+    }
+    else {
+        int y_start = p1.y < p2.y ? p1.y : p2.y;
+        y_start = y_start * 5;
+        this->VerticalLine(p1.x * 9 - 2 + 7, y_start + 4, 4, '|');
+    }
+
+    //Traverse from destination to the root
+    while (!path.empty()) {
+        //Move point to the next
+        p1 = p2;
+        p2 = path.front();
+        path.pop();
+
+        if (p1.x != p2.x) {
+            int x_start = p1.x < p2.x ? p1.x : p2.x;
+            x_start = x_start * 9 - 1 + 7;
+            this->HorizontalLine(x_start, p1.y * 5 - 1 + 4, 8, '-');
+        }
+        else {
+            int y_start = p1.y < p2.y ? p1.y : p2.y;
+            y_start = y_start * 5;
+            this->VerticalLine(p1.x * 9 - 2 + 7, y_start + 4, 4, '|');
+        }
     }
 }
