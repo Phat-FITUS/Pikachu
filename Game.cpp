@@ -68,13 +68,16 @@ void Game::selectDifficultPage() {
 			}
 			case ENTER: {
 				if (selection == 0) {
-					
+					this->board.changeSize(2, 2);
+					this->playingPage();
 				}
 				if (selection == 1) {
-					
+					this->board.changeSize(4, 4);
+					this->playingPage();
 				}
 				if (selection == 2) {
-					
+					this->board.changeSize(6, 6);
+					this->playingPage();
 				}
 				if (selection == 3) {
 					playing = false;
@@ -118,6 +121,7 @@ void Game::customDifficultPage() {
 				}
 				else {
 					if (!width_Board.empty() && !height_Board.empty() && board.changeSize(stoi(width_Board), stoi(height_Board))) {
+						this->playingPage();
 					}
 				}
 				break;
@@ -138,6 +142,80 @@ void Game::customDifficultPage() {
 }
 
 void Game::playingPage() {
+	bool playing = true;
+	Coordinate selection(1, 1);
+	Coordinate choices[2];
+
+	this->board.addPokemon();
+	this->screen.Clear();
+
+	while (playing) {
+		this->board.display(10, 6, selection, choices);
+
+		char key_press = _getch();
+
+		char** board_data = this->board.getData();
+
+		switch (key_press)
+		{
+		case ENTER: {
+			if (choices[0] == Coordinate()) {
+				choices[0] = selection;
+			}
+			else if (choices[1] == Coordinate()) {
+				choices[1] = selection;
+				this->board.display(10, 6, selection, choices);
+
+				if (Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1]) 
+					&& board_data[choices[0].x][choices[0].y] == board_data[choices[1].x][choices[1].y] && board_data[choices[0].x][choices[0].y] != 0) {
+					queue<Coordinate> path = Optimization::getPath(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1]);
+
+					draw.LineBetweenCells(choices[0], choices[1], path);
+
+					board_data[choices[0].x][choices[0].y] = 0;
+					board_data[choices[1].x][choices[1].y] = 0;
+				}
+
+				Sleep(500);
+
+				choices[0] = Coordinate();
+				choices[1] = Coordinate();
+				this->screen.Clear();
+			}
+			break;
+		}
+		case RIGHTARROW:
+		case 'd': {
+			do {
+				selection = Coordinate(selection.x == this->board.getWidth() ? 1 : selection.x + 1, selection.y);
+			} while (board_data[selection.x][selection.y] == 0);
+			break;
+		}
+		case LEFTARROW:
+		case 'a': {
+			do {
+				selection = Coordinate(selection.x > 1 ? selection.x - 1 : this->board.getWidth(), selection.y);
+			} while (board_data[selection.x][selection.y] == 0);
+			break;
+		}
+		case UPARROW:
+		case 'w': {
+			do {
+				selection = Coordinate(selection.x, selection.y > 1 ? selection.y - 1 : this->board.getHeight());
+			} while (board_data[selection.x][selection.y] == 0);
+			break;
+		}
+		case DOWNARROW:
+		case 's': {
+			do {
+				selection = Coordinate(selection.x, selection.y == this->board.getHeight() ? 1 : selection.y + 1);
+			} while (board_data[selection.x][selection.y] == 0);
+			break;
+		}
+		default:
+			break;
+		}
+	}
 }
 
 void Game::leaderBoard() {

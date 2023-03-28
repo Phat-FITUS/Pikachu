@@ -39,8 +39,8 @@ void Optimization::initBoardGame(char** board, int width, int height){
 
 	//put the random to data
 	int randomIndex = 0;
-	for (int i = 1; i <= height; i++) {
-		for (int j = 1; j <= width; j++) {
+	for (int i = 1; i <= width; i++) {
+		for (int j = 1; j <= height; j++) {
 			board[i][j] = list[randomIndex++].value + 'A';
 		}
 	}
@@ -58,7 +58,7 @@ bool Optimization::canConnect(char** board, int width, int height, Coordinate ro
 		mark[i] = new bool[height + 2];
 		trace[i] = new Coordinate[height + 2];
 
-		for (int j = 0; j < width + 2; j++) {
+		for (int j = 0; j < height + 2; j++) {
 			mark[i][j] = false;
 			trace[i][j] = Coordinate(i, j);
 		}
@@ -82,6 +82,43 @@ bool Optimization::canConnect(char** board, int width, int height, Coordinate ro
 	delete[] trace;
 
 	return numberOfTurn <= 2;
+}
+
+queue<Coordinate> Optimization::getPath(char** board, int width, int height, Coordinate root, Coordinate destination) {
+	//initialization
+	bool** mark = new bool* [width + 2];
+	Coordinate** trace = new Coordinate * [width + 2];
+
+	for (int i = 0; i < width + 2; i++) {
+		mark[i] = new bool[height + 2];
+		trace[i] = new Coordinate[height + 2];
+
+		for (int j = 0; j < height + 2; j++) {
+			mark[i][j] = false;
+			trace[i][j] = Coordinate(i, j);
+		}
+	}
+
+	int numberOfTurn = INT_MAX;
+	queue<Coordinate> listPoint;
+
+	//Add root as first point to be visited
+	mark[root.x][root.y] = true;
+	listPoint.push(root);
+
+	Optimization::spreadRoute(board, width, height, root, destination, trace, listPoint, mark, numberOfTurn);
+
+	queue<Coordinate> path = makePath(trace, destination);
+
+	//Deallocation
+	for (int i = 0; i < width + 2; i++) {
+		delete[] mark[i];
+		delete[] trace[i];
+	}
+	delete[] mark;
+	delete[] trace;
+
+	return path;
 }
 
 queue<Coordinate> Optimization::makePath(Coordinate** trace, Coordinate destination) {

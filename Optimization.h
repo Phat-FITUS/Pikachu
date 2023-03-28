@@ -19,6 +19,7 @@ private:
 	static int getNumberOfTurn(Coordinate**, Coordinate);
 	static void spreadRoute(char**, int, int, Coordinate, Coordinate, Coordinate**, queue<Coordinate>, bool**, int&);
 	static void moveTo(char**, Coordinate, Coordinate, Coordinate, Coordinate**, queue<Coordinate>&, bool**, int&);
+	static queue<Coordinate> makePath(Coordinate**, Coordinate);
 public:
 	static void initBoardGame(char**, int, int);
 	template<typename T>
@@ -26,5 +27,5 @@ public:
 	template<typename T>
 	static void swap(T&, T&);
 	static bool canConnect(char**, int, int, Coordinate, Coordinate);
-	static queue<Coordinate> makePath(Coordinate**, Coordinate);
+	static queue<Coordinate> getPath(char**, int, int, Coordinate, Coordinate);
 };
