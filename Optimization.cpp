@@ -88,6 +88,34 @@ void Optimization::shuffleBoardGame(char** board, int width, int height) {
 	delete[] list;
 }
 
+void Optimization::slideDownBoardCell(char** board, int width, int height) {
+	for (int i = 1; i <= width; i++) {
+		//Traverse from last row to find the last appearance of empty cell in the column
+		int start_zero = height;
+		while (board[i][start_zero] != 0 && start_zero > 0) start_zero--;
+
+		//Declare a variable to find the last appearance of the non-empty cell in the column
+		int start_nonZero = start_zero - 1;
+
+		do {
+			while (board[i][start_zero] != 0 && start_zero > 0) start_zero--;
+
+			//Find from the last row
+			while (board[i][start_nonZero] == 0 && start_nonZero > 0) start_nonZero--;
+
+			//Make sure the pointer do not point to out of board
+			if (start_nonZero > 0 && start_zero > 0) {
+				//Swap the last empty cell with the non-empty one
+				Optimization::swap(board[i][start_nonZero], board[i][start_zero]);
+			}
+
+			//Assign new index of the last empty cell in the column
+			//Then the loop will continue to swap the empty cell(s) to the first row(s)
+			start_zero = start_nonZero;
+		} while (start_nonZero > 0 && start_zero > 0); //Reach top margin condition
+	}
+}
+
 bool Optimization::canConnect(char** board, int width, int height, Coordinate root, Coordinate destination){
 	//initialization
 	bool** mark = new bool* [width + 2];
@@ -226,22 +254,22 @@ void Optimization::spreadRoute(char** board, int width, int height, Coordinate r
 
 		//Move up
 		if (currentPoint.y > 0) {
-			Optimization::moveTo(board, currentPoint, Coordinate(currentPoint.x, currentPoint.y - 1), destination, trace, listPoint, isVisited, numberOfTurn);
+			Optimization::moveTo(board, currentPoint, Coordinate(currentPoint.x, currentPoint.y - 1), destination, trace, newQueue, isVisited, numberOfTurn);
 		}
 
 		//Move down
 		if (currentPoint.y < height + 1) {
-			Optimization::moveTo(board, currentPoint, Coordinate(currentPoint.x, currentPoint.y + 1), destination, trace, listPoint, isVisited, numberOfTurn);
+			Optimization::moveTo(board, currentPoint, Coordinate(currentPoint.x, currentPoint.y + 1), destination, trace, newQueue, isVisited, numberOfTurn);
 		}
 
 		//Move left
 		if (currentPoint.x > 0) {
-			Optimization::moveTo(board, currentPoint, Coordinate(currentPoint.x - 1, currentPoint.y), destination, trace, listPoint, isVisited, numberOfTurn);
+			Optimization::moveTo(board, currentPoint, Coordinate(currentPoint.x - 1, currentPoint.y), destination, trace, newQueue, isVisited, numberOfTurn);
 		}
 
 		//Move right
 		if (currentPoint.x < width + 1) {
-			Optimization::moveTo(board, currentPoint, Coordinate(currentPoint.x + 1, currentPoint.y), destination, trace, listPoint, isVisited, numberOfTurn);
+			Optimization::moveTo(board, currentPoint, Coordinate(currentPoint.x + 1, currentPoint.y), destination, trace, newQueue, isVisited, numberOfTurn);
 		}
 
 		//remove the calculated point

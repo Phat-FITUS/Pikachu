@@ -201,12 +201,15 @@ void Game::playingPage() {
 				this->board.display(10, 6, selection, choices, hint);
 
 				if (Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1]) 
+					&& Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices[1], choices[0])
 					&& board_data[choices[0].x][choices[0].y] == board_data[choices[1].x][choices[1].y] && board_data[choices[0].x][choices[0].y] != 0) {
 					queue<Coordinate> path = Optimization::getPath(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1]);
 
+					//Purple arrow
+					this->screen.SetColor(this->screen.color.Black, this->screen.color.LightPurple);
 					draw.LineBetweenCells(choices[0], choices[1], path);
 
-					//Make matched cell empty
+					//Make matched cells empty
 					board_data[choices[0].x][choices[0].y] = 0;
 					board_data[choices[1].x][choices[1].y] = 0;
 
@@ -243,6 +246,9 @@ void Game::playingPage() {
 				while (!this->board.canPlay()) {
 					Optimization::shuffleBoardGame(board_data, this->board.getWidth(), this->board.getHeight());
 				}
+
+				//Slide the empty cell(s) up
+				Optimization::slideDownBoardCell(board_data, this->board.getWidth(), this->board.getHeight());
 
 				choices[0] = Coordinate();
 				choices[1] = Coordinate();
@@ -369,20 +375,37 @@ void Game::endGamePage(int minute, int second) {
 	int selection = 0;
 
 	while (playing) {
+		//Check existing user
+		User user_result(username.c_str(), minute, second, this->current_mode);
+		int user_index = this->leader_board.find(user_result);
 
 		this->screen.Clear();
 
-		this->printImageFromFile(80, 12, "tv2.bin", this->screen.color.Green);
+		this->printImageFromFile(80, 13, "tv2.bin", this->screen.color.Green);
 
 		this->screen.GoTo(31, 8);
 		this->screen.SetColor(this->screen.color.Black, this->screen.color.LightGreen);
 		cout << "Congratulation user " << this->username << " on finishing the game!";
 
-		this->screen.GoTo(10, 11);
-		cout << "You have finished the game in " << minute << " minutes and " << second << " seconds. Do you want to save your score?";
+		//If existing, ask to update the old one
+		if (user_index == -1) {
+			this->screen.GoTo(18, 11);
+			cout << "You have finished in " << minute << " minutes and " << second << " seconds. Do you want to save your score?";
 
-		draw.Button(34, 13, 19, 5, "Save", selection == 0);
-		draw.Button(54, 13, 19, 5, "No tks!", selection == 1);
+			draw.Button(34, 13, 19, 5, "Update", selection == 0);
+			draw.Button(54, 13, 19, 5, "No tks!", selection == 1);
+		}
+		else {
+			User user_old_result = this->leader_board.at(user_index);
+			this->screen.GoTo(18, 10);
+			cout << "In the last time, you have finished the game in " << user_old_result.minute << " minutes and " << user_old_result.second << " seconds";
+
+			this->screen.GoTo(11, 11);
+			cout << "In this game, you have finished in " << minute << " minutes and " << second << " seconds. Do you want to update your score?";
+
+			draw.Button(34, 13, 19, 5, "Save", selection == 0);
+			draw.Button(54, 13, 19, 5, "No tks!", selection == 1);
+		}
 
 		char key_press = _getch();
 
@@ -395,9 +418,6 @@ void Game::endGamePage(int minute, int second) {
 		case ENTER: {
 			if (selection == 0) {
 				//When user agree to save his score, push it to leader board if user is new, otherwise edit user's result then save to file
-				User user_result(username.c_str(), minute, second, this->current_mode);
-				int user_index = this->leader_board.find(user_result);
-
 				if (user_index == -1) {
 					this->leader_board.push_back(user_result);
 				}
