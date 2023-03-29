@@ -4,25 +4,10 @@
 #include <iostream>
 
 template<typename T>
-void Optimization::sort(T* arr, int n, bool (*cmp)(T a, T b)) {
-	for (int i = 0; i < n; i++) {
-		for (int j = i + 1; j < n; j++) {
-			if (cmp(arr[i], arr[j])) {
-				Optimization::swap(arr[i], arr[j]);
-			}
-		}
-	}
-}
-
-template<typename T>
 void Optimization::swap(T& a, T& b){
 	T temp = a;
 	a = b;
 	b = temp;
-}
-
-bool compareRandom(randomPair a, randomPair b) {
-	return a.randomOrder < b.randomOrder;
 }
 
 void Optimization::initBoardGame(char** board, int width, int height){
@@ -35,7 +20,13 @@ void Optimization::initBoardGame(char** board, int width, int height){
 	}
 
 	//sort the random order
-	Optimization::sort(list, width * height, compareRandom);
+	for (int i = 0; i < width * height; i++) {
+		for (int j = i + 1; j < width * height; j++) {
+			if (list[i].randomOrder > list[j].randomOrder) {
+				Optimization::swap(list[i], list[j]);
+			}
+		}
+	}
 
 	//put the random to data
 	int randomIndex = 0;
@@ -75,7 +66,13 @@ void Optimization::shuffleBoardGame(char** board, int width, int height) {
 	}
 
 	//sort the random order
-	Optimization::sort(list, width * height, compareRandom);
+	for (int i = 0; i < width * height; i++) {
+		for (int j = i + 1; j < width * height; j++) {
+			if (list[i].randomOrder > list[j].randomOrder) {
+				Optimization::swap(list[i], list[j]);
+			}
+		}
+	}
 
 	//put the random to data
 	index = 0;

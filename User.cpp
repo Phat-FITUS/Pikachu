@@ -1,33 +1,148 @@
 #include "User.h"
 #include <iostream>
+#include <fstream>
+using namespace std;
 
-UserList::UserList() {
+LeaderBoard::LeaderBoard() {
+	//Initial list
 	this->head = NULL;
 	this->tail = NULL;
 	this->lenght = 0;
-}
 
-void UserList::push_back(User)
-{
-}
-
-User UserList::pop_back()
-{
-	return User();
-}
-
-int UserList::find(User)
-{
-	return 0;
-}
-
-User UserList::at(int)
-{
-	return User();
-}
-
-UserList::~UserList() {
-	while (this->lenght) {
-		this->pop_back();
+	//Load saved leaderboard
+	ifstream fi("leaderboard.bin", ios::binary);
+	if (fi.fail()) {
+		ofstream fo("leaderboard.bin", ios::binary);
+		fo.close();
 	}
+	else {
+		User data;
+		while (fi.read((char*)&data, sizeof data)) {
+			this->push_back(data);
+		}
+	}
+	fi.close();
+}
+
+void LeaderBoard::push_back(User value) {
+	UserNode* newNode = new UserNode;
+
+	newNode->data = value;
+	newNode->previous = tail;
+	newNode->next = NULL;
+
+	if (tail != NULL) {
+		tail->next = newNode;
+	}
+
+	tail = newNode;
+
+	if (head == NULL) {
+		head = newNode;
+	}
+
+	this->lenght++;
+}
+
+User LeaderBoard::pop_back() {
+	if (tail == NULL) {
+		cout << "The list is empty" << endl;
+		return User();
+	}
+
+	UserNode* temp = tail;
+
+	tail = tail->previous;
+
+	if (tail != NULL) {
+		tail->next = NULL;
+	}
+
+	if (temp == head) {
+		head = NULL;
+	}
+
+	User data = temp->data;
+	delete temp;
+
+	this->lenght--;
+
+	return data;
+}
+
+int LeaderBoard::find(User target)
+{
+	int index = 0;
+
+	UserNode* current = head;
+	while (current != NULL) {
+		if (current->data == target) return index;
+		current = current->next;
+	}
+
+	return -1;
+}
+
+void LeaderBoard::swap(UserNode* a, UserNode* b) {
+	User t = a->data;
+	a->data = b->data;
+	b->data = t;
+}
+
+UserNode* LeaderBoard::getNode(int index) {
+	if (index >= this->lenght || index < 0) throw "Index out of range";
+
+	UserNode* current = this->head;
+	int currentPosition = 0;
+	while (current != NULL) {
+		if (index == currentPosition) return current;
+		current = current->next;
+		currentPosition++;
+	}
+}
+
+User LeaderBoard::at(int index) {
+	if (index >= this->lenght || index < 0) throw "Index out of range";
+
+	UserNode* current = this->head;
+	int currentPosition = 0;
+	while (current != NULL) {
+		if (index == currentPosition) return current->data;
+		current = current->next;
+		currentPosition++;
+	}
+}
+
+//Use for debug purpose
+void LeaderBoard::printList() {
+	UserNode* current = head;
+	while (current != NULL) {
+		cout << current->data.username << " " << current->data.minute << " " << current->data.second << endl;
+		current = current->next;
+	}
+}
+
+void LeaderBoard::sort() {
+	for (int i = 0; i < this->lenght; i++) {
+		for (int j = i + 1; j < this->lenght; j++) {
+			if (this->getNode(i)->data > this->getNode(j)->data) {
+				this->swap(this->getNode(i), this->getNode(j));
+			}
+		}
+	}
+}
+
+int LeaderBoard::getSize()
+{
+	return this->lenght;
+}
+
+LeaderBoard::~LeaderBoard() {
+	//save to leaderboard before exiting
+	ofstream fo("leaderboard.bin", ios::binary);
+	while (this->lenght) {
+		User data = this->pop_back();
+		fo.write((char*)&data, sizeof data);
+	}
+	fo.close();
 }

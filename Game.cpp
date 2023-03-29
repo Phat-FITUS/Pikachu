@@ -33,7 +33,7 @@ void Game::mainMenu() {
 					this->customDifficultPage();
 				}
 				if (selection == 2) {
-					this->leaderBoard();
+					this->leaderBoardPage();
 				}
 				if (selection == 3) {
 					playing = false;
@@ -70,14 +70,17 @@ void Game::selectDifficultPage() {
 			case ENTER: {
 				if (selection == 0) {
 					this->board.changeSize(2, 2);
+					this->current_mode = 1;
 					this->playingPage();
 				}
 				if (selection == 1) {
 					this->board.changeSize(4, 4);
+					this->current_mode = 2;
 					this->playingPage();
 				}
 				if (selection == 2) {
 					this->board.changeSize(6, 6);
+					this->current_mode = 3;
 					this->playingPage();
 				}
 				if (selection == 3) {
@@ -85,7 +88,6 @@ void Game::selectDifficultPage() {
 				}
 				break;
 			default:
-				selection = 0;
 				break;
 			}
 		}
@@ -269,11 +271,66 @@ void Game::playingPage() {
 	}
 }
 
-void Game::leaderBoard() {
-
+void Game::leaderBoardPage() {
 	this->screen.Clear();
 
-	cout << "ditme BHT";
+	bool playing = true;
+	int selection = 0;
+	this->leader_board.sort();
+
+	while (playing) {
+		int mode_line[3] = { 12, 12, 12 };
+
+		this->printImageFromFile(30, 0, "leader_art.bin", this->screen.color.LightYellow);
+
+		this->screen.SetColor(this->screen.color.Black, this->screen.color.Green);
+		this->screen.GoTo(14, 8);
+		cout << "Easy Mode";
+
+		this->screen.GoTo(2, 10);
+		this->screen.SetColor(this->screen.color.Black, this->screen.color.BrightWhite);
+		printf_s("NO. %-16s %s", "Username", "Finish Time");
+		this->draw.HorizontalLine(2, 11, 35, '-');
+
+		this->screen.SetColor(this->screen.color.Black, this->screen.color.Yellow);
+		this->screen.GoTo(53, 8);
+		cout << "Medium Mode";
+
+		this->screen.GoTo(42, 10);
+		this->screen.SetColor(this->screen.color.Black, this->screen.color.BrightWhite);
+		printf_s("NO. %-16s %s", "Username", "Finish Time");
+		this->draw.HorizontalLine(42, 11, 35, '-');
+
+		this->screen.SetColor(this->screen.color.Black, this->screen.color.Red);
+		this->screen.GoTo(94, 8);
+		cout << "Hard Mode";
+
+		this->screen.GoTo(82, 10);
+		this->screen.SetColor(this->screen.color.Black, this->screen.color.BrightWhite);
+		printf_s("NO. %-16s %s", "Username", "Finish Time");
+		this->draw.HorizontalLine(82, 11, 35, '-');
+
+		for (int i = 0; i < this->leader_board.getSize(); i++) {
+			User current = this->leader_board.at(i);
+
+			if (current.mode == 0) continue; //ignore custom mode
+
+			this->screen.GoTo((current.mode - 1) * 40 + 2, mode_line[current.mode - 1]++);
+			printf_s("%-2d. %-16s %d:%d", mode_line[current.mode - 1] - 12, current.username, current.minute, current.second);
+		}
+
+		char key_press = _getch();
+
+		switch (key_press)
+		{
+		case ESC: {
+			playing = false;
+			break;
+		}
+		default:
+			break;
+		}
+	}
 }
 
 bool Game::isEndGame() {
@@ -318,6 +375,10 @@ void Game::endGamePage(int minute, int second) {
 			break;
 		}
 		case ENTER: {
+			if (selection == 0) {
+				//When user agree to save his score, push it to leader board
+				this->leader_board.push_back(User(username.c_str(), minute, second, this->current_mode));
+			}
 			playing = false;
 			break;
 		}
@@ -353,7 +414,8 @@ void Game::start() {
 				playing = false;
 			}
 			else if (!this->username.empty()){ //Only accept unempty username
-				this->mainMenu();
+				//this->mainMenu();
+				this->leaderBoardPage();
 			}
 			break;
 		}
