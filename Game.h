@@ -26,7 +26,6 @@ private:
 	void leaderBoardPage();
 	bool isEndGame();
 	void endGamePage(int, int);
-	void exitPage();
 	void printImageFromFile(int, int, string, int);
 public:
 	void start();

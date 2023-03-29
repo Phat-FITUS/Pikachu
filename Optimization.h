@@ -28,6 +28,7 @@ private:
 public:
 	static void initBoardGame(char**, int, int);
 	static void shuffleBoardGame(char**, int, int);
+	static void slideDownBoardCell(char**, int, int);
 	template<typename T>
 	static void swap(T&, T&);
 	static bool canConnect(char**, int, int, Coordinate, Coordinate);
