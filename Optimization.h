@@ -11,6 +11,11 @@ struct randomPair {
 		this->value       = other.value;
 		this->randomOrder = other.randomOrder;
 	}
+
+	randomPair() {
+		this->value       = 0;
+		this->randomOrder = 0;
+	}
 };
 
 class Optimization
@@ -22,8 +27,7 @@ private:
 	static queue<Coordinate> makePath(Coordinate**, Coordinate);
 public:
 	static void initBoardGame(char**, int, int);
-	template<typename T>
-	static void sort(T*, int, bool(*cmp)(T a, T b));
+	static void shuffleBoardGame(char**, int, int);
 	template<typename T>
 	static void swap(T&, T&);
 	static bool canConnect(char**, int, int, Coordinate, Coordinate);

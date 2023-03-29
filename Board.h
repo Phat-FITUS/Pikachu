@@ -15,15 +15,16 @@ private:
 	void allocate(); 
 	void deallocate();
 	bool checkValidSize(int width, int height);
-	bool canPlay();
 public:
 	Board();
 	Board(int, int);
 	~Board();
-	void display(int, int, Coordinate, Coordinate[2]);
+	void display(int, int, Coordinate, Coordinate[2], Coordinate*);
 	void fill(char);
 	void addPokemon();
 	bool changeSize(int, int);
+	bool canPlay();
+	Coordinate* help();
 	int getWidth();
 	int getHeight();
 	char** getData();
