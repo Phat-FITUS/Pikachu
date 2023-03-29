@@ -440,10 +440,10 @@ void Game::start() {
 		
 		this->screen.Clear();
 
-		printImageFromFile(32, 1, "logo.bin", this->screen.color.BrightWhite);
-		draw.TextEntry(40, 8, 38, 4, "username", this->username, "Your username...", selection == 0);
-		draw.Button(40, 13, 18, 5, "Enter", selection == 1);
-		draw.Button(60, 13, 18, 5, "Exit", selection == 2);
+		printImageFromFile(23, 1, "logo.bin", this->screen.color.LightYellow);
+		draw.TextEntry(40, 14, 38, 4, "username", this->username, "Your username...", selection == 0);
+		draw.Button(40, 19, 18, 5, "Enter", selection == 1);
+		draw.Button(60, 19, 18, 5, "Exit", selection == 2);
 
 		char key_press = _getch();
 
