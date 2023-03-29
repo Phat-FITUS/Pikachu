@@ -14,7 +14,7 @@ struct User {
 	}
 
 	bool operator == (User other) {
-		return strcmp(this->username, other.username) == 0;
+		return (strcmp(this->username, other.username) == 0) && (this->mode == other.mode);
 	}
 
 	bool operator > (User other) {
@@ -48,16 +48,18 @@ private:
 	UserNode* head;
 	UserNode* tail;
 	UserNode* getNode(int);
+	void swap(UserNode*, UserNode*);
 public:
 	LeaderBoard();
 	void push_back(User);
 	User pop_back();
 	int find(User);
 	User at(int);
-	void swap(UserNode*, UserNode*);
+	void editAt(int, User);
 	void printList();
 	void sort();
 	int getSize();
+	void save();
 	~LeaderBoard();
 };
 

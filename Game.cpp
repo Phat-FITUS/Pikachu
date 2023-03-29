@@ -12,10 +12,12 @@ void Game::mainMenu() {
 
 		this->screen.Clear();
 
-		draw.Button(17, 13, 20, 5, "Play", selection == 0);
-		draw.Button(38, 13, 20, 5, "Custom Play", selection == 1);
-		draw.Button(59, 13, 20, 5, "Leaderboard", selection == 2);
-		draw.Button(80, 13, 20, 5, "Exit", selection == 3);
+		this->printImageFromFile(40, 0, "menu.bin", this->screen.color.LightYellow);
+		draw.Button(17, 9, 20, 5, "Play", selection == 0);
+		draw.Button(38, 9, 20, 5, "Custom Play", selection == 1);
+		draw.Button(59, 9, 20, 5, "Leaderboard", selection == 2);
+		draw.Button(80, 9, 20, 5, "Exit", selection == 3);
+		this->printImageFromFile(48, 15, "tv2.bin", this->screen.color.Green);
 
 		char key_press = _getch();
 
@@ -54,10 +56,12 @@ void Game::selectDifficultPage() {
 
 		this->screen.Clear();
 
-		draw.Button(17, 13, 20, 5, "Easy (2x2)", selection == 0);
-		draw.Button(38, 13, 20, 5, "Medium (4x4)", selection == 1);
-		draw.Button(59, 13, 20, 5, "Hard (6x6)", selection == 2);
-		draw.Button(80, 13, 20, 5, "Exit", selection == 3);
+		this->printImageFromFile(2, 0, "choose_mode.bin", this->screen.color.LightYellow);
+		draw.Button(17, 9, 20, 5, "Easy (2x2)", selection == 0);
+		draw.Button(38, 9, 20, 5, "Medium (4x4)", selection == 1);
+		draw.Button(59, 9, 20, 5, "Hard (6x6)", selection == 2);
+		draw.Button(80, 9, 20, 5, "Exit", selection == 3);
+		this->printImageFromFile(48, 15, "tv2.bin", this->screen.color.Green);
 
 		char key_press = _getch();
 
@@ -103,10 +107,13 @@ void Game::customDifficultPage() {
 
 		this->screen.Clear();
 
-		draw.TextEntry(34, 8, 19, 4, "Width", width_Board, "Your width...", selection == 0);
-		draw.TextEntry(54, 8, 19, 4, "Height",height_Board, "Your height...", selection == 1);
-		draw.Button(34, 13, 19, 5, "Enter", selection == 2);
-		draw.Button(54, 13, 19, 5, "Exit", selection == 3);
+		this->printImageFromFile(2, 0, "custom_mode.bin", this->screen.color.LightYellow);
+		draw.TextEntry(40, 10, 19, 4, "Width", width_Board, "Your width...", selection == 0);
+		draw.TextEntry(60, 10, 19, 4, "Height",height_Board, "Your height...", selection == 1);
+		draw.Button(40, 15, 19, 5, "Enter", selection == 2);
+		draw.Button(60, 15, 19, 5, "Exit", selection == 3);
+		this->printImageFromFile(90, 10, "tv2.bin", this->screen.color.Green);
+		this->printImageFromFile(10, 10, "tv3.bin", this->screen.color.Green);
 
 		char key_press = _getch();
 
@@ -157,6 +164,7 @@ void Game::playingPage() {
 
 	while (playing) {
 		this->board.display(10, 6, selection, choices, hint);
+		this->printImageFromFile(85, 5, "tv5.bin", this->screen.color.Green);
 
 		char key_press = _getch();
 
@@ -286,6 +294,8 @@ void Game::leaderBoardPage() {
 	while (playing) {
 		int mode_line[3] = { 12, 12, 12 };
 
+		this->printImageFromFile(90, 18, "tv4.bin", this->screen.color.Green);
+
 		this->printImageFromFile(30, 0, "leader_art.bin", this->screen.color.LightYellow);
 
 		this->screen.SetColor(this->screen.color.Black, this->screen.color.Green);
@@ -315,10 +325,12 @@ void Game::leaderBoardPage() {
 		printf_s("NO. %-16s %s", "Username", "Finish Time");
 		this->draw.HorizontalLine(82, 11, 35, '-');
 
-		for (int i = 0; i < this->leader_board.getSize(); i++) {
+		for (int i = 0; i < this->leader_board.getSize(); i++) { //Just show top 5
 			User current = this->leader_board.at(i);
 
 			if (current.mode == 0) continue; //ignore custom mode
+
+			if (mode_line[current.mode - 1] - 12 > 5) continue; //ignore over top 5
 
 			this->screen.GoTo((current.mode - 1) * 40 + 2, mode_line[current.mode - 1]++);
 			printf_s("%-2d. %-16s %d:%d", mode_line[current.mode - 1] - 12, current.username, current.minute, current.second);
@@ -360,6 +372,8 @@ void Game::endGamePage(int minute, int second) {
 
 		this->screen.Clear();
 
+		this->printImageFromFile(80, 12, "tv2.bin", this->screen.color.Green);
+
 		this->screen.GoTo(31, 8);
 		this->screen.SetColor(this->screen.color.Black, this->screen.color.LightGreen);
 		cout << "Congratulation user " << this->username << " on finishing the game!";
@@ -380,48 +394,17 @@ void Game::endGamePage(int minute, int second) {
 		}
 		case ENTER: {
 			if (selection == 0) {
-				//When user agree to save his score, push it to leader board
-				this->leader_board.push_back(User(username.c_str(), minute, second, this->current_mode));
-			}
-			this->exitPage();
-			playing = false;
-			break;
-		}
-		default:
-			break;
-		}
-	}
-}
+				//When user agree to save his score, push it to leader board if user is new, otherwise edit user's result then save to file
+				User user_result(username.c_str(), minute, second, this->current_mode);
+				int user_index = this->leader_board.find(user_result);
 
-void Game::exitPage() {
-	bool playing = true;
-	int selection = 0;
-
-	while (playing) {
-
-		this->screen.Clear();
-
-		this->screen.GoTo(38, 8);
-		this->screen.SetColor(this->screen.color.Black, this->screen.color.LightGreen);
-		cout << "Do you want to play more?";
-
-		draw.Button(36, 13, 19, 5, "Yesss", selection == 0);
-		draw.Button(54, 13, 19, 5, "No, exit", selection == 1);
-
-		char key_press = _getch();
-
-		switch (key_press)
-		{
-		case TAB: {
-			selection = (selection + 1) % 2;
-			break;
-		}
-		case ENTER: {
-			if (selection == 0) {
-				this->mainMenu();
-			}
-			if (selection == 1) {
-				//exit(0);
+				if (user_index == -1) {
+					this->leader_board.push_back(user_result);
+				}
+				else {
+					this->leader_board.editAt(user_index, user_result);
+				}
+				this->leader_board.save();
 			}
 			playing = false;
 			break;
@@ -444,6 +427,7 @@ void Game::start() {
 		draw.TextEntry(40, 14, 38, 4, "username", this->username, "Your username...", selection == 0);
 		draw.Button(40, 19, 18, 5, "Enter", selection == 1);
 		draw.Button(60, 19, 18, 5, "Exit", selection == 2);
+		this->printImageFromFile(5, 12, "tv.bin", this->screen.color.Green);
 
 		char key_press = _getch();
 
@@ -473,6 +457,9 @@ void Game::start() {
 			break;
 		}
 	}
+
+	//Set the default color to console before exit
+	this->screen.SetColor(this->screen.color.Black, this->screen.color.BrightWhite);
 }
 
 void Game::printImageFromFile(int x, int y, string filename, int colorCode) {

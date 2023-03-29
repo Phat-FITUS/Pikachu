@@ -10,7 +10,7 @@ private:
 	Object draw;
 	const int CELL_WIDTH = 9;
 	const int CELL_HEIGHT = 5;
-	static const int MAX_SIZE = 8;
+	static const int MAX_SIZE = 6;
 
 	void allocate(); 
 	void deallocate();

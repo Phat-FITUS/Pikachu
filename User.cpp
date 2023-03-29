@@ -113,6 +113,13 @@ User LeaderBoard::at(int index) {
 	}
 }
 
+void LeaderBoard::editAt(int index, User data) {
+	if (index >= this->lenght || index < 0) throw "Index out of range";
+
+	UserNode* target = getNode(index);
+	target->data = data;
+}
+
 //Use for debug purpose
 void LeaderBoard::printList() {
 	UserNode* current = head;
@@ -137,12 +144,16 @@ int LeaderBoard::getSize()
 	return this->lenght;
 }
 
-LeaderBoard::~LeaderBoard() {
-	//save to leaderboard before exiting
+void LeaderBoard::save() {
 	ofstream fo("leaderboard.bin", ios::binary);
 	while (this->lenght) {
 		User data = this->pop_back();
 		fo.write((char*)&data, sizeof data);
 	}
 	fo.close();
+}
+
+LeaderBoard::~LeaderBoard() {
+	//save to leaderboard before exiting
+	this->save();
 }
