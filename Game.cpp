@@ -12,10 +12,10 @@ void Game::mainMenu() {
 
 		this->screen.Clear();
 
-		draw.Button(48, 8, 20, 5, "Play", selection == 0);
-		draw.Button(48, 13, 20, 5, "Custom Play", selection == 1);
-		draw.Button(48, 18, 20, 5, "Leaderboard", selection == 2);
-		draw.Button(48, 23, 20, 5, "Exit", selection == 3);
+		draw.Button(17, 13, 20, 5, "Play", selection == 0);
+		draw.Button(38, 13, 20, 5, "Custom Play", selection == 1);
+		draw.Button(59, 13, 20, 5, "Leaderboard", selection == 2);
+		draw.Button(80, 13, 20, 5, "Exit", selection == 3);
 
 		char key_press = _getch();
 
@@ -54,10 +54,10 @@ void Game::selectDifficultPage() {
 
 		this->screen.Clear();
 
-		draw.Button(48, 8, 20, 5, "Easy (2x2)", selection == 0);
-		draw.Button(48, 13, 20, 5, "Medium (4x4)", selection == 1);
-		draw.Button(48, 18, 20, 5, "Hard (6x6)", selection == 2);
-		draw.Button(48, 23, 20, 5, "Exit", selection == 3);
+		draw.Button(17, 13, 20, 5, "Easy (2x2)", selection == 0);
+		draw.Button(38, 13, 20, 5, "Medium (4x4)", selection == 1);
+		draw.Button(59, 13, 20, 5, "Hard (6x6)", selection == 2);
+		draw.Button(80, 13, 20, 5, "Exit", selection == 3);
 
 		char key_press = _getch();
 
