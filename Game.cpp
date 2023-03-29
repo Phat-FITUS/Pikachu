@@ -145,12 +145,13 @@ void Game::playingPage() {
 	bool playing = true;
 	Coordinate selection(1, 1);
 	Coordinate choices[2];
+	Coordinate* hint = new Coordinate[2];
 
 	this->board.addPokemon();
 	this->screen.Clear();
 
 	while (playing) {
-		this->board.display(10, 6, selection, choices);
+		this->board.display(10, 6, selection, choices, hint);
 
 		char key_press = _getch();
 
@@ -158,6 +159,18 @@ void Game::playingPage() {
 
 		switch (key_press)
 		{
+		case ESC: {
+			playing = false;
+			break;
+		}
+		case 'h': {
+			//Delete old hint
+			delete[] hint;
+
+			//Create new one
+			hint = this->board.help();
+			break;
+		}
 		case ENTER: {
 			if (board_data[selection.x][selection.y] == 0) break;
 
@@ -166,7 +179,7 @@ void Game::playingPage() {
 			}
 			else if (choices[1] == Coordinate()) {
 				choices[1] = selection;
-				this->board.display(10, 6, selection, choices);
+				this->board.display(10, 6, selection, choices, hint);
 
 				if (Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1]) 
 					&& board_data[choices[0].x][choices[0].y] == board_data[choices[1].x][choices[1].y] && board_data[choices[0].x][choices[0].y] != 0) {
@@ -174,8 +187,20 @@ void Game::playingPage() {
 
 					draw.LineBetweenCells(choices[0], choices[1], path);
 
+					//Make matched cell empty
 					board_data[choices[0].x][choices[0].y] = 0;
 					board_data[choices[1].x][choices[1].y] = 0;
+
+					//Delete old hint
+					try {
+						delete[] hint;
+					}
+					catch(exception e) {
+						//Co loi thi keme no di :)) xoa cho chac an thoi
+					}
+
+					//Create new one
+					hint = new Coordinate[2];
 				}
 
 				Sleep(500);
@@ -218,6 +243,14 @@ void Game::playingPage() {
 		default:
 			break;
 		}
+	}
+
+	//Delete temporary hint
+	try {
+		delete[] hint;
+	}
+	catch (exception e) {
+		//Co loi thi keme no di :)) xoa cho chac an thoi
 	}
 }
 

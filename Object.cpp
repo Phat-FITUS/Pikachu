@@ -15,7 +15,20 @@ void Object::VerticalLine(int x, int y, int height, char value) {
     }
 }
 
-void Object::Cell(int x, int y, int width, int height, char value, bool selected, bool active) {
+void Object::Cell(int x, int y, int width, int height, char value, bool selected, bool active, bool isHint) {
+    //Hint mark
+    if (isHint) {
+        this->screen.SetColor(screen.color.Black, screen.color.LightYellow);
+        this->screen.GoTo(x + 2, y + 1);
+        cout << "*";
+        this->screen.GoTo(x + width - 3, y + 1);
+        cout << "*";
+        this->screen.GoTo(x + 2, y + height - 2);
+        cout << "*";
+        this->screen.GoTo(x + width - 3, y + height - 2);
+        cout << "*";
+    }
+
     //Draw active cell
     if (active) {
         this->screen.SetColor(screen.color.Black, screen.color.LightRed);
