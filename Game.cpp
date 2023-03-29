@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <fstream>
-#include<conio.h>
+#include <conio.h>
+#include <chrono>
 
 void Game::mainMenu() {
 	
@@ -150,6 +151,9 @@ void Game::playingPage() {
 	this->board.addPokemon();
 	this->screen.Clear();
 
+	//Start time
+	auto start = std::chrono::steady_clock::now();
+
 	while (playing) {
 		this->board.display(10, 6, selection, choices, hint);
 
@@ -206,6 +210,17 @@ void Game::playingPage() {
 				Sleep(500);
 
 				if (this->isEndGame()) {
+					//Finish time
+					auto end = std::chrono::steady_clock::now();
+					auto duration_sec = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
+
+					// Calculate the minutes and seconds
+					int minutes = duration_sec / 60;
+					int seconds = duration_sec % 60;
+
+					//Move to ending page
+					this->endGamePage(minutes, seconds);
+
 					return;
 				}
 
@@ -273,6 +288,43 @@ bool Game::isEndGame() {
 	}
 
 	return endGame;
+}
+
+void Game::endGamePage(int minute, int second) {
+	bool playing = true;
+	int selection = 0;
+
+
+	while (playing) {
+
+		this->screen.Clear();
+
+		this->screen.GoTo(31, 8);
+		this->screen.SetColor(this->screen.color.Black, this->screen.color.LightGreen);
+		cout << "Congratulation user " << this->username << " on finishing the game!";
+
+		this->screen.GoTo(10, 11);
+		cout << "You have finished the game in " << minute << " minutes and " << second << " seconds. Do you want to save your score?";
+
+		draw.Button(34, 13, 19, 5, "Save", selection == 0);
+		draw.Button(54, 13, 19, 5, "Exit", selection == 1);
+
+		char key_press = _getch();
+
+		switch (key_press)
+		{
+		case TAB: {
+			selection = (selection + 1) % 2;
+			break;
+		}
+		case ENTER: {
+			playing = false;
+			break;
+		}
+		default:
+			break;
+		}
+	}
 }
 
 void Game::start() {

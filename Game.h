@@ -23,6 +23,7 @@ private:
 	void playingPage();
 	void leaderBoard();
 	bool isEndGame();
+	void endGamePage(int, int);
 	void printImageFromFile(int, int, string, int);
 public:
 	void start();
