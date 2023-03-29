@@ -83,13 +83,11 @@ void Game::selectDifficultPage() {
 					this->current_mode = 3;
 					this->playingPage();
 				}
-				if (selection == 3) {
-					playing = false;
-				}
+				playing = false;
+			}
 				break;
 			default:
 				break;
-			}
 		}
 	}
 }
@@ -125,6 +123,7 @@ void Game::customDifficultPage() {
 				else {
 					if (!width_Board.empty() && !height_Board.empty() && board.changeSize(stoi(width_Board), stoi(height_Board))) {
 						this->playingPage();
+						playing = false;
 					}
 				}
 				break;
@@ -184,6 +183,12 @@ void Game::playingPage() {
 				choices[0] = selection;
 			}
 			else if (choices[1] == Coordinate()) {
+				//Unselect the selection
+				if (choices[0] == selection) {
+					this->screen.Clear();
+					choices[0] = Coordinate();
+					break;
+				}
 				choices[1] = selection;
 				this->board.display(10, 6, selection, choices, hint);
 
@@ -351,7 +356,6 @@ void Game::endGamePage(int minute, int second) {
 	bool playing = true;
 	int selection = 0;
 
-
 	while (playing) {
 
 		this->screen.Clear();
@@ -364,7 +368,7 @@ void Game::endGamePage(int minute, int second) {
 		cout << "You have finished the game in " << minute << " minutes and " << second << " seconds. Do you want to save your score?";
 
 		draw.Button(34, 13, 19, 5, "Save", selection == 0);
-		draw.Button(54, 13, 19, 5, "Exit", selection == 1);
+		draw.Button(54, 13, 19, 5, "No tks!", selection == 1);
 
 		char key_press = _getch();
 
@@ -378,6 +382,46 @@ void Game::endGamePage(int minute, int second) {
 			if (selection == 0) {
 				//When user agree to save his score, push it to leader board
 				this->leader_board.push_back(User(username.c_str(), minute, second, this->current_mode));
+			}
+			this->exitPage();
+			playing = false;
+			break;
+		}
+		default:
+			break;
+		}
+	}
+}
+
+void Game::exitPage() {
+	bool playing = true;
+	int selection = 0;
+
+	while (playing) {
+
+		this->screen.Clear();
+
+		this->screen.GoTo(38, 8);
+		this->screen.SetColor(this->screen.color.Black, this->screen.color.LightGreen);
+		cout << "Do you want to play more?";
+
+		draw.Button(36, 13, 19, 5, "Yesss", selection == 0);
+		draw.Button(54, 13, 19, 5, "No, exit", selection == 1);
+
+		char key_press = _getch();
+
+		switch (key_press)
+		{
+		case TAB: {
+			selection = (selection + 1) % 2;
+			break;
+		}
+		case ENTER: {
+			if (selection == 0) {
+				this->mainMenu();
+			}
+			if (selection == 1) {
+				//exit(0);
 			}
 			playing = false;
 			break;
@@ -414,8 +458,7 @@ void Game::start() {
 				playing = false;
 			}
 			else if (!this->username.empty()){ //Only accept unempty username
-				//this->mainMenu();
-				this->leaderBoardPage();
+				this->mainMenu();
 			}
 			break;
 		}
