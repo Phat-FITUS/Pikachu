@@ -128,8 +128,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Optimization.cpp" />
     <ClCompile Include="Pikachu.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="User.cpp" />
@@ -138,9 +140,11 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="Console.h" />
+    <ClInclude Include="Coordinate.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Optimization.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
