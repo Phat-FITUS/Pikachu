@@ -78,6 +78,7 @@ int LeaderBoard::find(User target)
 	while (current != NULL) {
 		if (current->data == target) return index;
 		current = current->next;
+		index++;
 	}
 
 	return -1;
@@ -146,8 +147,8 @@ int LeaderBoard::getSize()
 
 void LeaderBoard::save() {
 	ofstream fo("leaderboard.bin", ios::binary);
-	while (this->lenght) {
-		User data = this->pop_back();
+	for (int i = 0; i < this->lenght; i++) {
+		User data = this->at(i);
 		fo.write((char*)&data, sizeof data);
 	}
 	fo.close();
@@ -156,4 +157,9 @@ void LeaderBoard::save() {
 LeaderBoard::~LeaderBoard() {
 	//save to leaderboard before exiting
 	this->save();
+
+	//Deallocate memory
+	while (this->lenght) {
+		this->pop_back();
+	}
 }
