@@ -20,7 +20,9 @@ Board::Board(int width, int height) {
 Board::~Board() {
     this->width = 0;
     this->height = 0;
-    this->deallocate();
+    if (this->data) {
+        this->deallocate();
+    }
 }
 
 void Board::allocate() {
