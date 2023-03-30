@@ -78,7 +78,7 @@ Coordinate* Board::help() {
                     if ((x1 != x2 || y1 != y2) 
                         && this->data[x1][y1] == this->data[x2][y2] 
                         && this->data[x1][y1] != 0
-                        && Optimization().canConnect(this->data, this->width, this->height, Coordinate(x1, y1), Coordinate(x2, y2))
+                        && Optimization::canConnect(this->data, this->width, this->height, Coordinate(x1, y1), Coordinate(x2, y2))
                     ) {
                         Coordinate* hint = new Coordinate[2];
 

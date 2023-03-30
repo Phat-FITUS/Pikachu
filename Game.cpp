@@ -168,8 +168,6 @@ void Game::playingPage() {
 
 		char key_press = _getch();
 
-		char** board_data = this->board.getData();
-
 		switch (key_press)
 		{
 		case ESC: {
@@ -185,6 +183,8 @@ void Game::playingPage() {
 			break;
 		}
 		case ENTER: {
+			char** board_data = this->board.getData();
+
 			if (board_data[selection.x][selection.y] == 0) break;
 
 			if (choices[0] == Coordinate()) {
@@ -200,10 +200,15 @@ void Game::playingPage() {
 				choices[1] = selection;
 				this->board.display(10, 6, selection, choices, hint);
 
-				if (Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1]) 
-					&& Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices[1], choices[0])
+				char** board_data = this->board.getData();
+
+				if ((Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1]) 
+					|| Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices[1], choices[0]))
 					&& board_data[choices[0].x][choices[0].y] == board_data[choices[1].x][choices[1].y] && board_data[choices[0].x][choices[0].y] != 0) {
 					queue<Coordinate> path = Optimization::getPath(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1]);
+					if (path.size() == 0) {
+						path = Optimization::getPath(board_data, this->board.getWidth(), this->board.getHeight(), choices[1], choices[0]);
+					}
 
 					//Purple arrow
 					this->screen.SetColor(this->screen.color.Black, this->screen.color.LightPurple);
