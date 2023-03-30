@@ -12,3 +12,10 @@ struct Coordinate {
 	void operator = (Coordinate other);
 };
 
+struct CoupleCoordinate {
+	Coordinate first_choice;
+	Coordinate second_choice;
+
+	void operator = (CoupleCoordinate other);
+};
+

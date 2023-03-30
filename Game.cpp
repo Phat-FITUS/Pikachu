@@ -154,7 +154,7 @@ void Game::playingPage() {
 	bool playing = true;
 	Coordinate selection(1, 1);
 	Coordinate choices[2];
-	Coordinate* hint = new Coordinate[2];
+	CoupleCoordinate hint{ Coordinate(-1, -1), Coordinate(-1, -1) };
 
 	this->board.addPokemon();
 	this->screen.Clear();
@@ -175,9 +175,6 @@ void Game::playingPage() {
 			break;
 		}
 		case 'h': {
-			//Delete old hint
-			delete[] hint;
-
 			//Create new one
 			hint = this->board.help();
 			break;
@@ -218,16 +215,9 @@ void Game::playingPage() {
 					board_data[choices[0].x][choices[0].y] = 0;
 					board_data[choices[1].x][choices[1].y] = 0;
 
-					//Delete old hint
-					try {
-						delete[] hint;
-					}
-					catch(exception e) {
-						//Co loi thi keme no di :)) xoa cho chac an thoi
-					}
-
-					//Create new one
-					hint = new Coordinate[2];
+					//Remove hint
+					hint.first_choice = Coordinate(-1, -1);
+					hint.second_choice = Coordinate(-1, -1);
 				}
 
 				Sleep(500);
@@ -241,8 +231,11 @@ void Game::playingPage() {
 					int minutes = duration_sec / 60;
 					int seconds = duration_sec % 60;
 
-					//Move to ending page
-					this->endGamePage(minutes, seconds);
+					//Custom mode will not save anything
+					if (this->current_mode) {
+						//Move to ending page
+						this->endGamePage(minutes, seconds);
+					}
 
 					return;
 				}
@@ -284,14 +277,6 @@ void Game::playingPage() {
 		default:
 			break;
 		}
-	}
-
-	//Delete temporary hint
-	try {
-		delete[] hint;
-	}
-	catch (exception e) {
-		//Co loi thi keme no di :)) xoa cho chac an thoi
 	}
 }
 
