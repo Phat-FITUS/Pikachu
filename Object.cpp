@@ -1,4 +1,4 @@
-#include "Object.h"
+﻿#include "Object.h"
 #include <iostream>
 
 void Object::HorizontalLine(int x, int y, int width, char value) {
@@ -55,9 +55,16 @@ void Object::Cell(int x, int y, int width, int height, char value, bool selected
     int x_center = width % 2 == 0 ? x - 1 + width / 2 : x + width / 2;
     int y_center = height % 2 == 0 ? y - 1 + height / 2 : y + height / 2;
 
-    //Insert character into cell
-    this->screen.GoTo(x_center, y_center);
-    cout << value;
+    if (value) {
+        //Insert character into cell
+        this->screen.GoTo(x_center, y_center);
+        cout << value;
+    }
+    else {
+        //ϞϞ(๑⚈ ․̫ ⚈๑)∩
+        this->screen.GoTo(x_center - 3, y_center);
+        cout << "/(^x^)\\";
+    }
 
     //Object top horizontal line
     this->HorizontalLine(x + 1, y, width - 2, '-');
