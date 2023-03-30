@@ -73,5 +73,35 @@
     <None Include="logo.bin">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="choose_mode.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="custom_mode.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="leader_art.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="leaderboard.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="menu.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="tv.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="tv2.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="tv3.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="tv4.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="tv5.bin">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -148,7 +148,17 @@
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="choose_mode.bin" />
+    <None Include="custom_mode.bin" />
+    <None Include="leaderboard.bin" />
+    <None Include="leader_art.bin" />
     <None Include="logo.bin" />
+    <None Include="menu.bin" />
+    <None Include="tv.bin" />
+    <None Include="tv2.bin" />
+    <None Include="tv3.bin" />
+    <None Include="tv4.bin" />
+    <None Include="tv5.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
