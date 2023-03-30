@@ -111,7 +111,7 @@ void Optimization::slideDownBoardCell(char** board, int width, int height) {
 
 			//Assign new index of the last empty cell in the column
 			//Then the loop will continue to swap the empty cell(s) to the first row(s)
-			start_zero = start_nonZero;
+			start_zero = height;
 		} while (start_nonZero > 0 && start_zero > 0); //Reach top margin condition
 	}
 }

@@ -5,8 +5,6 @@
 #include <queue>
 using namespace std;
 
-using namespace std;
-
 class Object
 {
 private:
