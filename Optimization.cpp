@@ -154,7 +154,7 @@ bool Optimization::canConnect(char** board, int width, int height, Coordinate ro
 queue<Coordinate> Optimization::getPath(char** board, int width, int height, Coordinate root, Coordinate destination) {
 	//initialization
 	bool** mark = new bool* [width + 2];
-	Coordinate** trace = new Coordinate * [width + 2];
+	Coordinate** trace = new Coordinate* [width + 2];
 
 	for (int i = 0; i < width + 2; i++) {
 		mark[i] = new bool[height + 2];

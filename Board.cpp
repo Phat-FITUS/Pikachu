@@ -70,7 +70,7 @@ bool Board::canPlay(){
     return canPlay;
 }
 
-Coordinate* Board::help() {
+CoupleCoordinate Board::help() {
     for (int x1 = 1; x1 <= this->width; x1++) {
         for (int y1 = 1; y1 <= this->height; y1++) {
             for (int x2 = 1; x2 <= this->width; x2++) {
@@ -80,11 +80,11 @@ Coordinate* Board::help() {
                         && this->data[x1][y1] != 0
                         && Optimization::canConnect(this->data, this->width, this->height, Coordinate(x1, y1), Coordinate(x2, y2))
                     ) {
-                        Coordinate* hint = new Coordinate[2];
+                        CoupleCoordinate hint;
 
                         //Store suggested points
-                        hint[0] = Coordinate(x1, y1);
-                        hint[1] = Coordinate(x2, y2);
+                        hint.first_choice = Coordinate(x1, y1);
+                        hint.second_choice = Coordinate(x2, y2);
 
                         return hint;
                     }
@@ -94,7 +94,7 @@ Coordinate* Board::help() {
     }
 }
 
-void Board::display(int x_start, int y_start, Coordinate currentSelection, Coordinate active[2], Coordinate* hint) {
+void Board::display(int x_start, int y_start, Coordinate currentSelection, Coordinate active[2], CoupleCoordinate hint) {
     for (int i = 1; i <= this->width; i++) {
         for (int j = 1; j <= this->height; j++) {
             this->draw.Cell((i - 1) * this->CELL_WIDTH + x_start, //Left top x of a Cell
@@ -104,7 +104,7 @@ void Board::display(int x_start, int y_start, Coordinate currentSelection, Coord
                 this->data[i][j], //Value text of a Cell
                 currentSelection == Coordinate(i, j),
                 active[0] == Coordinate(i, j) || active[1] == Coordinate(i, j),
-                hint[0] == Coordinate(i, j) || hint[1] == Coordinate(i, j)
+                hint.first_choice == Coordinate(i, j) || hint.second_choice == Coordinate(i, j)
             );
         }
     }

@@ -22,3 +22,8 @@ void Coordinate::operator = (Coordinate other) {
 	this->x = other.x;
 	this->y = other.y;
 }
+
+void CoupleCoordinate::operator=(CoupleCoordinate other) {
+	this->first_choice = other.first_choice;
+	this->second_choice = other.second_choice;
+}
