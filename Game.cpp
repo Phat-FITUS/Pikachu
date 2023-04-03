@@ -493,8 +493,21 @@ void Game::endGamePage(int minute, int second) {
 	}
 }
 
+void Game::thankyouPage() {
+	this->screen.Clear();
+
+	this->printImageFromFile(5, 0, "thanks.bin", this->screen.color.LightYellow);
+	this->printImageFromFile(30, 10, "thanks2.bin", this->screen.color.LightYellow);
+
+	this->screen.GoTo(44, 21);
+	cout << "Press any key to exit";
+
+	char key_press = _getch();
+}
+
 void Game::start() {
 	this->loginPage();
+	this->thankyouPage();
 
 	//Set the default color to console before exit
 	this->screen.SetColor(this->screen.color.Black, this->screen.color.BrightWhite);
