@@ -19,6 +19,7 @@ private:
 	LeaderBoard leader_board;
 	int current_mode = 0; //1: easy, 2: medium, 3: hard
 
+	void loginPage();
 	void mainMenu();
 	void selectDifficultPage();
 	void customDifficultPage();

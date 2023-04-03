@@ -42,28 +42,29 @@ void Object::Cell(int x, int y, int width, int height, char value, bool selected
         cout << (char)217;
     }
 
-    //Color of selected cell
-    this->screen.GoTo(x, y);
-    if (selected) {
-        this->screen.SetColor(screen.color.Black, screen.color.LightBlue);
-    }
-    else {
-        this->screen.SetColor(screen.color.Black, screen.color.BrightWhite);
-    }
-
     //Calculate the center position
     int x_center = width % 2 == 0 ? x - 1 + width / 2 : x + width / 2;
     int y_center = height % 2 == 0 ? y - 1 + height / 2 : y + height / 2;
 
     if (value) {
+        this->screen.SetColor(screen.color.Black, screen.color.BrightWhite);
+
         //Insert character into cell
         this->screen.GoTo(x_center, y_center);
         cout << value;
     }
     else {
-        //ϞϞ(๑⚈ ․̫ ⚈๑)∩
-        this->screen.GoTo(x_center - 3, y_center);
-        cout << "/(^x^)\\";
+        this->screen.GoTo(x_center - 2, y_center);
+        this->screen.SetColor(this->screen.color.Black, this->screen.color.LightPurple);
+        cout << "<(\")";
+    }
+
+    //Color of selected cell
+    if (selected) {
+        this->screen.SetColor(screen.color.Black, screen.color.LightBlue);
+    }
+    else {
+        this->screen.SetColor(screen.color.Black, screen.color.BrightWhite);
     }
 
     //Object top horizontal line
