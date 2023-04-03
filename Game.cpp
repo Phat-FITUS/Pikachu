@@ -3,6 +3,58 @@
 #include <conio.h>
 #include <chrono>
 
+void Game::loginPage() {
+	bool playing = true;
+	int selection = 0;
+
+	while (playing) {
+
+		this->screen.Clear();
+
+		printImageFromFile(23, 1, "logo.bin", this->screen.color.LightYellow);
+		draw.TextEntry(40, 14, 38, 4, "username", this->username, "Your username...", selection == 0);
+		draw.Button(40, 19, 18, 5, "Enter", selection == 1);
+		draw.Button(60, 19, 18, 5, "Exit", selection == 2);
+		this->printImageFromFile(5, 12, "tv.bin", this->screen.color.Green);
+
+		char key_press = _getch();
+
+		switch (key_press)
+		{
+		case TAB: {
+			selection = (selection + 1) % 3;
+			break;
+		}
+		case ENTER: {
+			if (selection == 2) {
+				playing = false;
+			}
+			else if (!this->username.empty()) { //Only accept unempty username
+				this->mainMenu();
+				playing = false;
+			}
+			break;
+		}
+		case BACKSPACE:
+		case DELETE_KEY:
+		case 83: case -32: { //delete key of some laptop board
+			if (username.length() && selection == 0) username.pop_back();
+			else cout << '\a'; //Error sound of windows when can not delete anymore
+			break;
+		}
+		default:
+			if (username.length() < 32 && selection == 0 &&
+				((key_press >= 'a' && key_press <= 'z')
+					|| (key_press >= 'A' && key_press <= 'Z')
+					|| key_press == 32)
+				) username.push_back(key_press);
+			else cout << '\a'; //Error sound of windows when can not accept the key press
+
+			break;
+		}
+	}
+}
+
 void Game::mainMenu() {
 	
 	bool playing = true;
@@ -129,8 +181,13 @@ void Game::customDifficultPage() {
 				}
 				else {
 					if (!width_Board.empty() && !height_Board.empty() && board.changeSize(stoi(width_Board), stoi(height_Board))) {
+						this->current_mode = 0;
 						this->playingPage();
 						playing = false;
+					}
+					else {
+						//Error sound of windows
+						cout << '\a';
 					}
 				}
 				break;
@@ -143,6 +200,7 @@ void Game::customDifficultPage() {
 				break;
 			}
 			default:
+				if (key_press >= '0' && key_press <= '9')
 				if (selection == 0) width_Board.push_back(key_press);
 				if (selection == 1) height_Board.push_back(key_press);
 				break;
@@ -219,6 +277,10 @@ void Game::playingPage() {
 					hint.first_choice = Coordinate(-1, -1);
 					hint.second_choice = Coordinate(-1, -1);
 				}
+				else {
+					//Error sound of windows
+					cout << '\a';
+				}
 
 				Sleep(500);
 
@@ -231,6 +293,13 @@ void Game::playingPage() {
 					int minutes = duration_sec / 60;
 					int seconds = duration_sec % 60;
 
+					//Let user see the board last time :((
+					this->screen.Clear();
+					choices[0] = Coordinate();
+					choices[1] = Coordinate();
+					this->board.display(10, 6, selection, choices, hint);
+					Sleep(500);
+
 					//Custom mode will not save anything
 					if (this->current_mode) {
 						//Move to ending page
@@ -240,13 +309,15 @@ void Game::playingPage() {
 					return;
 				}
 
+				//Slide the empty cell(s) up in hard mode
+				if (this->current_mode == 3) {
+					Optimization::slideDownBoardCell(board_data, this->board.getWidth(), this->board.getHeight());
+				}
+
 				//Shuffle the board until there is a path connecting any cell
 				while (!this->board.canPlay()) {
 					Optimization::shuffleBoardGame(board_data, this->board.getWidth(), this->board.getHeight());
 				}
-
-				//Slide the empty cell(s) up
-				Optimization::slideDownBoardCell(board_data, this->board.getWidth(), this->board.getHeight());
 
 				choices[0] = Coordinate();
 				choices[1] = Coordinate();
@@ -364,10 +435,26 @@ void Game::endGamePage(int minute, int second) {
 	bool playing = true;
 	int selection = 0;
 
+	//Check existing user
+	User user_result(username.c_str(), minute, second, this->current_mode);
+	int user_index = this->leader_board.find(user_result);
+
+	//Push new result to leader board if user is new, otherwise edit user's result when the new one is higher then save to file
+	if (user_index == -1) {
+		this->leader_board.push_back(user_result);
+	}
+	else {
+		User user_old_result = this->leader_board.at(user_index);
+		int old_score = user_old_result.minute * 60 + user_old_result.second;
+		int new_score = user_result.minute * 60 + user_result.second;
+
+		if (old_score > new_score) {
+			this->leader_board.editAt(user_index, user_result);
+		}
+	}
+	this->leader_board.save();
+
 	while (playing) {
-		//Check existing user
-		User user_result(username.c_str(), minute, second, this->current_mode);
-		int user_index = this->leader_board.find(user_result);
 
 		this->screen.Clear();
 
@@ -377,25 +464,11 @@ void Game::endGamePage(int minute, int second) {
 		this->screen.SetColor(this->screen.color.Black, this->screen.color.LightGreen);
 		cout << "Congratulation user " << this->username << " on finishing the game!";
 
-		//If existing, ask to update the old one
-		if (user_index == -1) {
-			this->screen.GoTo(18, 11);
-			cout << "You have finished in " << minute << " minutes and " << second << " seconds. Do you want to save your score?";
+		this->screen.GoTo(44, 11);
+		cout << "Do you want to continue?";
 
-			draw.Button(34, 13, 19, 5, "Update", selection == 0);
-			draw.Button(54, 13, 19, 5, "No tks!", selection == 1);
-		}
-		else {
-			User user_old_result = this->leader_board.at(user_index);
-			this->screen.GoTo(18, 10);
-			cout << "In the last time, you have finished the game in " << user_old_result.minute << " minutes and " << user_old_result.second << " seconds";
-
-			this->screen.GoTo(11, 11);
-			cout << "In this game, you have finished in " << minute << " minutes and " << second << " seconds. Do you want to update your score?";
-
-			draw.Button(34, 13, 19, 5, "Save", selection == 0);
-			draw.Button(54, 13, 19, 5, "No tks!", selection == 1);
-		}
+		draw.Button(34, 13, 19, 5, "Let's go", selection == 0);
+		draw.Button(54, 13, 19, 5, "No tks!", selection == 1);
 
 		char key_press = _getch();
 
@@ -407,14 +480,9 @@ void Game::endGamePage(int minute, int second) {
 		}
 		case ENTER: {
 			if (selection == 0) {
-				//When user agree to save his score, push it to leader board if user is new, otherwise edit user's result then save to file
-				if (user_index == -1) {
-					this->leader_board.push_back(user_result);
-				}
-				else {
-					this->leader_board.editAt(user_index, user_result);
-				}
-				this->leader_board.save();
+				this->current_mode = this->current_mode % 3 + 1;
+				this->board.changeSize(this->current_mode * 2, this->current_mode * 2);
+				this->playingPage();
 			}
 			playing = false;
 			break;
@@ -426,47 +494,7 @@ void Game::endGamePage(int minute, int second) {
 }
 
 void Game::start() {
-	bool playing = true;
-	int selection = 0;
-
-	while (playing) {
-		
-		this->screen.Clear();
-
-		printImageFromFile(23, 1, "logo.bin", this->screen.color.LightYellow);
-		draw.TextEntry(40, 14, 38, 4, "username", this->username, "Your username...", selection == 0);
-		draw.Button(40, 19, 18, 5, "Enter", selection == 1);
-		draw.Button(60, 19, 18, 5, "Exit", selection == 2);
-		this->printImageFromFile(5, 12, "tv.bin", this->screen.color.Green);
-
-		char key_press = _getch();
-
-		switch (key_press)
-		{
-		case TAB: {
-			selection = (selection + 1) % 3;
-			break;
-		}
-		case ENTER: {
-			if (selection == 2) {
-				playing = false;
-			}
-			else if (!this->username.empty()){ //Only accept unempty username
-				this->mainMenu();
-			}
-			break;
-		}
-		case BACKSPACE:
-		case DELETE_KEY:
-		case 83: case -32: { //delete key of some laptop board
-			if (username.length() && selection == 0) username.pop_back();
-			break;
-		}
-		default:
-			if (username.length() < 32 && selection == 0) username.push_back(key_press);
-			break;
-		}
-	}
+	this->loginPage();
 
 	//Set the default color to console before exit
 	this->screen.SetColor(this->screen.color.Black, this->screen.color.BrightWhite);
