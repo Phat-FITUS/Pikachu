@@ -96,7 +96,7 @@ void Object::Button(int x, int y, int width, int height, string text, bool selec
     int x_center = x + (width - text.length()) / 2;
     int y_center = y + height / 2;
 
-    //Insert character into cell
+    //Insert character into button
     this->screen.GoTo(x_center, y_center);
     cout << text;
 
