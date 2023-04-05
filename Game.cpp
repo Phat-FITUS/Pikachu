@@ -26,6 +26,7 @@ void Game::loginPage() {
 			break;
 		}
 		case ENTER: {
+			Optimization::TrimString(this->username);
 			if (selection == 2) {
 				playing = false;
 			}
