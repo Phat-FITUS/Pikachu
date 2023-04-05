@@ -1,6 +1,7 @@
 #pragma once
 #include "Coordinate.h"
 #include <queue>
+#include <string>
 using namespace std;
 
 struct randomPair {
@@ -21,11 +22,15 @@ struct randomPair {
 class Optimization
 {
 private:
+	static void RemoveLeadingAndTrailingSpaces(string&);
+	static void FormatString(string&);
+	static void RemoveExtraSpaces(string&);
 	static int getNumberOfTurn(Coordinate**, Coordinate);
 	static void spreadRoute(char**, int, int, Coordinate, Coordinate, Coordinate**, queue<Coordinate>, bool**, int&);
 	static void moveTo(char**, Coordinate, Coordinate, Coordinate, Coordinate**, queue<Coordinate>&, bool**, int&);
 	static queue<Coordinate> makePath(Coordinate**, Coordinate);
 public:
+	static void TrimString(string&);
 	static void initBoardGame(char**, int, int);
 	static void shuffleBoardGame(char**, int, int);
 	static void slideDownBoardCell(char**, int, int);

@@ -10,6 +10,16 @@ void Optimization::swap(T& a, T& b){
 	b = temp;
 }
 
+void Optimization::TrimString(string& str){
+
+	Optimization::RemoveLeadingAndTrailingSpaces(str);
+
+	Optimization::FormatString(str);
+
+	Optimization::RemoveExtraSpaces(str);
+
+}
+
 void Optimization::initBoardGame(char** board, int width, int height){
 	randomPair *list = new randomPair[width * height];
 
@@ -199,6 +209,42 @@ queue<Coordinate> Optimization::makePath(Coordinate** trace, Coordinate destinat
 	path.push(currentPoint);
 
 	return path;
+}
+
+void Optimization::RemoveLeadingAndTrailingSpaces(string& str){
+
+	while (str.length() > 0 && str[0] == ' ') {
+		str.erase(0, 1);
+	}
+	while (str.length() > 0 && str[str.length() - 1] == ' ') {
+		str.erase(str.length() - 1, 1);
+	}
+}
+
+void Optimization::FormatString(string& str){
+
+	for (int i = 0; i < str.length(); i++) {
+		if (i == 0 || str[i - 1] == ' ') {
+			str[i] = toupper(str[i]);
+		}
+		else {
+			str[i] = tolower(str[i]);
+		}
+	}
+}
+
+void Optimization::RemoveExtraSpaces(string& str){
+
+	int i = 0;
+	while (i < str.length()) {
+		if (str[i] == ' ' && (i == 0 || str[i - 1] == ' ')) {
+			str.erase(i, 1);
+		}
+		else {
+			i++;
+		}
+	}
+
 }
 
 int Optimization::getNumberOfTurn(Coordinate** trace, Coordinate destination) {
