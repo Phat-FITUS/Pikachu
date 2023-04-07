@@ -94,7 +94,7 @@ CoupleCoordinate Board::help() {
     }
 }
 
-void Board::display(int x_start, int y_start, Coordinate currentSelection, Coordinate active[2], CoupleCoordinate hint) {
+void Board::display(int x_start, int y_start, Coordinate currentSelection, CoupleCoordinate active, CoupleCoordinate hint) {
     for (int i = 1; i <= this->width; i++) {
         for (int j = 1; j <= this->height; j++) {
             this->draw.Cell((i - 1) * this->CELL_WIDTH + x_start, //Left top x of a Cell
@@ -103,7 +103,7 @@ void Board::display(int x_start, int y_start, Coordinate currentSelection, Coord
                 this->CELL_HEIGHT, //Height default of a Cell
                 this->data[i][j], //Value text of a Cell
                 currentSelection == Coordinate(i, j),
-                active[0] == Coordinate(i, j) || active[1] == Coordinate(i, j),
+                active.first_choice == Coordinate(i, j) || active.second_choice == Coordinate(i, j),
                 hint.first_choice == Coordinate(i, j) || hint.second_choice == Coordinate(i, j)
             );
         }

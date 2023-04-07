@@ -26,6 +26,7 @@ void Game::loginPage() {
 			break;
 		}
 		case ENTER: {
+			//Trim text to format the username
 			Optimization::TrimString(this->username);
 			if (selection == 2) {
 				playing = false;
@@ -34,13 +35,22 @@ void Game::loginPage() {
 				this->mainMenu();
 				playing = false;
 			}
+			else {
+				//Error sound of windows
+				wcout << '\a';
+				//Alert user
+				this->screen.GoTo(20, 25);
+				this->screen.SetColor(this->screen.color.Black, this->screen.color.LightRed);
+				cout << "username can not be empty";
+				Sleep(1000);
+			}
 			break;
 		}
 		case BACKSPACE:
 		case DELETE_KEY:
 		case 83: case -32: { //delete key of some laptop board
 			if (username.length() && selection == 0) username.pop_back();
-			else cout << '\a'; //Error sound of windows when can not delete anymore
+			else wcout << '\a'; //Error sound of windows when can not delete anymore
 			break;
 		}
 		default:
@@ -49,7 +59,7 @@ void Game::loginPage() {
 					|| (key_press >= 'A' && key_press <= 'Z')
 					|| key_press == 32)
 				) username.push_back(key_press);
-			else cout << '\a'; //Error sound of windows when can not accept the key press
+			else wcout << '\a'; //Error sound of windows when can not accept the key press
 
 			break;
 		}
@@ -182,13 +192,19 @@ void Game::customDifficultPage() {
 				}
 				else {
 					if (!width_Board.empty() && !height_Board.empty() && board.changeSize(stoi(width_Board), stoi(height_Board))) {
+						//Set to custom mode to handle later
 						this->current_mode = 0;
 						this->playingPage();
 						playing = false;
 					}
 					else {
 						//Error sound of windows
-						cout << '\a';
+						wcout << '\a';
+						//Alert user
+						this->screen.GoTo(20, 25);
+						this->screen.SetColor(this->screen.color.Black, this->screen.color.LightRed);
+						cout << "Valid size is either width or height is even, not over 6 and must not empty";
+						Sleep(1000);
 					}
 				}
 				break;
@@ -212,7 +228,7 @@ void Game::customDifficultPage() {
 void Game::playingPage() {
 	bool playing = true;
 	Coordinate selection(1, 1);
-	Coordinate choices[2];
+	CoupleCoordinate choices;
 	CoupleCoordinate hint{ Coordinate(-1, -1), Coordinate(-1, -1) };
 
 	this->board.addPokemon();
@@ -243,36 +259,37 @@ void Game::playingPage() {
 
 			if (board_data[selection.x][selection.y] == 0) break;
 
-			if (choices[0] == Coordinate()) {
-				choices[0] = selection;
+			//Check if user have chosen any cell
+			if (choices.first_choice == Coordinate()) {
+				choices.first_choice = selection;
 			}
-			else if (choices[1] == Coordinate()) {
+			else if (choices.second_choice == Coordinate()) {
 				//Unselect the selection
-				if (choices[0] == selection) {
+				if (choices.first_choice == selection) {
 					this->screen.Clear();
-					choices[0] = Coordinate();
+					choices.first_choice = Coordinate();
 					break;
 				}
-				choices[1] = selection;
+				choices.second_choice = selection;
 				this->board.display(10, 6, selection, choices, hint);
 
 				char** board_data = this->board.getData();
 
-				if ((Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1]) 
-					|| Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices[1], choices[0]))
-					&& board_data[choices[0].x][choices[0].y] == board_data[choices[1].x][choices[1].y] && board_data[choices[0].x][choices[0].y] != 0) {
-					queue<Coordinate> path = Optimization::getPath(board_data, this->board.getWidth(), this->board.getHeight(), choices[0], choices[1]);
+				if ((Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices.first_choice, choices.second_choice) 
+					|| Optimization::canConnect(board_data, this->board.getWidth(), this->board.getHeight(), choices.second_choice, choices.first_choice))
+					&& board_data[choices.first_choice.x][choices.first_choice.y] == board_data[choices.second_choice.x][choices.second_choice.y] && board_data[choices.first_choice.x][choices.first_choice.y] != 0) {
+					queue<Coordinate> path = Optimization::getPath(board_data, this->board.getWidth(), this->board.getHeight(), choices.first_choice, choices.second_choice);
 					if (path.size() == 0) {
-						path = Optimization::getPath(board_data, this->board.getWidth(), this->board.getHeight(), choices[1], choices[0]);
+						path = Optimization::getPath(board_data, this->board.getWidth(), this->board.getHeight(), choices.second_choice, choices.first_choice);
 					}
 
 					//Purple arrow
 					this->screen.SetColor(this->screen.color.Black, this->screen.color.LightPurple);
-					draw.LineBetweenCells(choices[0], choices[1], path);
+					draw.LineBetweenCells(choices.first_choice, choices.second_choice, path);
 
 					//Make matched cells empty
-					board_data[choices[0].x][choices[0].y] = 0;
-					board_data[choices[1].x][choices[1].y] = 0;
+					board_data[choices.first_choice.x][choices.first_choice.y] = 0;
+					board_data[choices.second_choice.x][choices.second_choice.y] = 0;
 
 					//Remove hint
 					hint.first_choice = Coordinate(-1, -1);
@@ -280,7 +297,7 @@ void Game::playingPage() {
 				}
 				else {
 					//Error sound of windows
-					cout << '\a';
+					wcout << '\a';
 				}
 
 				Sleep(500);
@@ -296,8 +313,8 @@ void Game::playingPage() {
 
 					//Let user see the board last time :((
 					this->screen.Clear();
-					choices[0] = Coordinate();
-					choices[1] = Coordinate();
+					choices.first_choice = Coordinate();
+					choices.second_choice = Coordinate();
 					this->board.display(10, 6, selection, choices, hint);
 					Sleep(500);
 
@@ -320,8 +337,8 @@ void Game::playingPage() {
 					Optimization::shuffleBoardGame(board_data, this->board.getWidth(), this->board.getHeight());
 				}
 
-				choices[0] = Coordinate();
-				choices[1] = Coordinate();
+				choices.first_choice = Coordinate();
+				choices.second_choice = Coordinate();
 				this->screen.Clear();
 			}
 			break;
@@ -372,7 +389,7 @@ void Game::leaderBoardPage() {
 
 		this->screen.GoTo(2, 10);
 		this->screen.SetColor(this->screen.color.Black, this->screen.color.BrightWhite);
-		printf_s("NO. %-16s %s", "Username", "Finish Time");
+		printf("NO. %-16s %s", "Username", "Finish Time");
 		this->draw.HorizontalLine(2, 11, 35, '-');
 
 		this->screen.SetColor(this->screen.color.Black, this->screen.color.Yellow);
@@ -381,7 +398,7 @@ void Game::leaderBoardPage() {
 
 		this->screen.GoTo(42, 10);
 		this->screen.SetColor(this->screen.color.Black, this->screen.color.BrightWhite);
-		printf_s("NO. %-16s %s", "Username", "Finish Time");
+		printf("NO. %-16s %s", "Username", "Finish Time");
 		this->draw.HorizontalLine(42, 11, 35, '-');
 
 		this->screen.SetColor(this->screen.color.Black, this->screen.color.Red);
@@ -390,7 +407,7 @@ void Game::leaderBoardPage() {
 
 		this->screen.GoTo(82, 10);
 		this->screen.SetColor(this->screen.color.Black, this->screen.color.BrightWhite);
-		printf_s("NO. %-16s %s", "Username", "Finish Time");
+		printf("NO. %-16s %s", "Username", "Finish Time");
 		this->draw.HorizontalLine(82, 11, 35, '-');
 
 		for (int i = 0; i < this->leader_board.getSize(); i++) { //Just show top 5
@@ -401,7 +418,7 @@ void Game::leaderBoardPage() {
 			if (mode_line[current.mode - 1] - 12 > 5) continue; //ignore over top 5
 
 			this->screen.GoTo((current.mode - 1) * 40 + 2, mode_line[current.mode - 1]++);
-			printf_s("%-2d. %-16s %d:%d", mode_line[current.mode - 1] - 12, current.username, current.minute, current.second);
+			printf("%-2d. %-16s %d:%d", mode_line[current.mode - 1] - 12, current.username, current.minute, current.second);
 		}
 
 		char key_press = _getch();
@@ -507,6 +524,12 @@ void Game::thankyouPage() {
 }
 
 void Game::start() {
+	//Initialize console
+	this->screen.SetWindowSize(120, 40);
+	this->screen.DisableCur();
+	this->screen.DisableMaximizeButton();
+	this->screen.DisableResizeWindow();
+
 	this->loginPage();
 	this->thankyouPage();
 

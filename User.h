@@ -7,7 +7,7 @@ struct User {
 	int mode;
 
 	void operator = (User other) {
-		strcpy_s(this->username, other.username);
+		strcpy(this->username, other.username);
 		this->minute = other.minute;
 		this->second = other.second;
 		this->mode = other.mode;
@@ -29,7 +29,7 @@ struct User {
 	}
 
 	User(const char* username, int minute, int second, int mode) {
-		strcpy_s(this->username, username);
+		strcpy(this->username, username);
 		this->minute = minute;
 		this->second = second;
 		this->mode = mode;

@@ -19,7 +19,7 @@ public:
 	Board();
 	Board(int, int);
 	~Board();
-	void display(int, int, Coordinate, Coordinate[2], CoupleCoordinate);
+	void display(int, int, Coordinate, CoupleCoordinate, CoupleCoordinate);
 	void fill(char);
 	void addPokemon();
 	bool changeSize(int, int);

@@ -103,5 +103,11 @@
     <None Include="tv5.bin">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="thanks.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="thanks2.bin">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
