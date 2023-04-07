@@ -100,6 +100,7 @@ UserNode* LeaderBoard::getNode(int index) {
 		current = current->next;
 		currentPosition++;
 	}
+	return NULL;
 }
 
 User LeaderBoard::at(int index) {

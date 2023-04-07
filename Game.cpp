@@ -105,6 +105,8 @@ void Game::mainMenu() {
 				}
 				break;
 			default:
+				//Error sound of windows
+				wcout << '\a';
 				break;
 			}
 		}
@@ -154,6 +156,8 @@ void Game::selectDifficultPage() {
 			}
 				break;
 			default:
+				//Error sound of windows
+				wcout << '\a';
 				break;
 		}
 	}
@@ -333,10 +337,19 @@ void Game::playingPage() {
 				}
 
 				//Shuffle the board until there is a path connecting any cell
+				if (!this->board.canPlay()) {
+					this->screen.SetColor(this->screen.color.Black, this->screen.color.LightYellow);
+					this->screen.GoTo(20, 25);
+					cout << "Oops! There are no moves left!";
+					this->screen.GoTo(20, 26);
+					cout << "Please wait while we shuffle board.";
+				}
+				Sleep(1000);
 				while (!this->board.canPlay()) {
+					
 					Optimization::shuffleBoardGame(board_data, this->board.getWidth(), this->board.getHeight());
 				}
-
+				
 				choices.first_choice = Coordinate();
 				choices.second_choice = Coordinate();
 				this->screen.Clear();
@@ -364,6 +377,8 @@ void Game::playingPage() {
 			break;
 		}
 		default:
+			//Error sound of windows
+			wcout << '\a';
 			break;
 		}
 	}
@@ -430,6 +445,8 @@ void Game::leaderBoardPage() {
 			break;
 		}
 		default:
+			//Error sound of windows
+			wcout << '\a';
 			break;
 		}
 	}
@@ -506,6 +523,8 @@ void Game::endGamePage(int minute, int second) {
 			break;
 		}
 		default:
+			//Error sound of windows
+			wcout << '\a';
 			break;
 		}
 	}
