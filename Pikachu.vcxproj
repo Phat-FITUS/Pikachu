@@ -154,6 +154,8 @@
     <None Include="leader_art.bin" />
     <None Include="logo.bin" />
     <None Include="menu.bin" />
+    <None Include="thanks.bin" />
+    <None Include="thanks2.bin" />
     <None Include="tv.bin" />
     <None Include="tv2.bin" />
     <None Include="tv3.bin" />
