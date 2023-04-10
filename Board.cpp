@@ -92,6 +92,7 @@ CoupleCoordinate Board::help() {
             }
         }
     }
+    return CoupleCoordinate();
 }
 
 void Board::display(int x_start, int y_start, Coordinate currentSelection, CoupleCoordinate active, CoupleCoordinate hint) {
